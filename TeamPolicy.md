@@ -24,8 +24,8 @@
 | Role | Member | Key Responsibilities |
 |------|---------|----------------------|
 | **Checker** | **Ryan Bui** | Ensures code follows standards, test cases run successfully, and merges are clean and complete before deadlines. |
-| **Coordinator** | **Christian Graceffa** | Organizes meetings, maintains task lists, takes notes, and keeps the team aligned on project goals. |
-| **Monitor** | **Haider Ahmed** | Oversees that functionality matches the proposal, verifies progress aligns with requirements, and tracks open GitLab issues. |
+| **Coordinator** | **Haider Ahmed** | Organizes meetings, maintains task lists, takes notes, and keeps the team aligned on project goals. |
+| **Monitor** | **Christian Graceffa** | Oversees that functionality matches the proposal, verifies progress aligns with requirements, and tracks open GitLab issues. |
 
 All members share responsibility for planning, coding, reviewing, and documenting the project.
 
@@ -116,5 +116,5 @@ Before merging any feature:
 
 **Signatures (Digital):**  
 - **Ryan Bui** — Checker  
-- **Christian Graceffa** — Coordinator  
-- **Haider Ahmed** — Monitor  
+- **Haider Ahmed** — Coordinator  
+- **Christian Graceffa** — Monitor  
