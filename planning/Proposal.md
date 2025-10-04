@@ -1,23 +1,25 @@
 # RealTime Stock Market 
 
 ## Data
-- Link to "Choose Data" issue: [Insert GitLab issue link here]
-- Summary of datasets:
-  - Dataset 1: 
-	Name: Stock Market Dataset.
-	Format: The format will be in csv files.
-	Size: The size will be a bunch of stock files.
-	Part we'll use: The part that we will use is the stock prices history so we are able to maybe predict, and 	                we will use selected major companies.
-	Source: kaggle.com/datasets/jacksoncrow/stock-market-dataset
-	License: Public Domain
-  
-  - Dataset 2: 
-	Name: Financial News Headlines Data
-	Format: csv files
-	Size: Not sure but a lot of headlines news and dates
-	Part we'll use: News headlines and dates to check why the stock went down or up.
-	Source: kaggle.com/datasets/notlucasp/financial-news-headlines
-	License: Public Domain
+- Link to "Choose Data" issue: [Choose Data](https://gitlab.com/dawson-cst-cohort-2026/520/section2/teams/TeamM-23-ChristianHaiderRyan/520-project-bui-ahmed-graceffa/-/issues/2)
+
+### Dataset 1:
+- **Name:** Stock Market Dataset  
+- **Format:** CSV files  
+- **Size:** Contains approximately **8,050 files** (≈ 2.75 GB total) including both ETF and stock data  
+- **Part Used:** We will use the stock price history (open, close, volume, etc.) to visualize performance trends and identify patterns among selected major companies and ETFs.  
+- **Source:** [kaggle.com/datasets/jacksoncrow/stock-market-dataset](https://www.kaggle.com/datasets/jacksoncrow/stock-market-dataset)  
+- **License:** Public Domain  
+
+### Dataset 2:
+- **Name:** Financial News Headlines Data  
+- **Format:** CSV files  
+- **Size:** Approximately **11.83 MB total**, with **3 CSV files** (`cnbc_headlines.csv`, `guardian_headlines.csv`, and `reuters_headlines.csv`) covering roughly **53,000 headlines** from **2017 – 2020**  
+- **Part Used:** We will use the headline text and publication date to analyze how financial news sentiment may have influenced stock and ETF movements.  
+- **Source:** [kaggle.com/datasets/notlucasp/financial-news-headlines](https://www.kaggle.com/datasets/notlucasp/financial-news-headlines)  
+- **License:** Public Domain  
+
+
 
 ## API
 You must describe at least 3 endpoints (since team of 3). For example:
