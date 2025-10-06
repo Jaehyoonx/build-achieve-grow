@@ -15,7 +15,7 @@
 - **Name:** Financial News Headlines Data  
 - **Format:** CSV files  
 - **Size:** Approximately **11.83 MB total**, with **3 CSV files** (`cnbc_headlines.csv`, `guardian_headlines.csv`, and `reuters_headlines.csv`) covering roughly **53,000 headlines** from **2017 – 2020**  
-- **Part Used:** We will use the headline text and publication date to analyze how financial news sentiment may have influenced stock and ETF movements.  
+- **Part Used:** We will use the headline text and publication date to connect financial news events with stock and ETF movements.
 - **Source:** [kaggle.com/datasets/notlucasp/financial-news-headlines](https://www.kaggle.com/datasets/notlucasp/financial-news-headlines)  
 - **License:** Public Domain  
 
@@ -79,6 +79,7 @@ You must have 3 views (team of 3).
   - Filtering news by category
   - comparing more than 2 stocks together
   - more advance statistic making it more accurate.
+  - Sentiment analysis of news headlines (future development, not part of current scope)
 
 ## Dependencies
 - Visualization library (or libraries) to use and why:
