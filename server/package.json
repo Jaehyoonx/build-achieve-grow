@@ -1,0 +1,26 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --timeout 10000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "@stylistic/eslint-plugin": "^5.5.0",
+    "chai": "^6.2.0",
+    "eslint": "^9.38.0",
+    "globals": "^16.4.0",
+    "mocha": "^11.7.4",
+    "sinon": "^21.0.0",
+    "supertest": "^7.1.4"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongodb": "^6.20.0"
+  }
+}
