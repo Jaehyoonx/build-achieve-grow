@@ -1,0 +1,21 @@
+{
+  "name": "520-project-bui-ahmed-graceffa",
+  "version": "1.0.0",
+  "description": "**Course:** 420-520-DW  \r **Semester:** Fall 2025  \r **Team Members:**  \r - Ryan Bui (Checker)\r - Haider Ahmed (Coordinator)\r - Christian Graceffa (Monitor)",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd server && node bin/www",
+    "build": "cd client && npm install && npm run build && cd ../server && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/dawson-cst-cohort-2026/520/section2/teams/TeamM-23-ChristianHaiderRyan/520-project-bui-ahmed-graceffa.git"
+  },
+  "author": "Ryan Bui, Christian Graceffa, Haider Ahmed",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/dawson-cst-cohort-2026/520/section2/teams/TeamM-23-ChristianHaiderRyan/520-project-bui-ahmed-graceffa/issues"
+  },
+  "homepage": "https://gitlab.com/dawson-cst-cohort-2026/520/section2/teams/TeamM-23-ChristianHaiderRyan/520-project-bui-ahmed-graceffa#readme"
+}
