@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://gitlab.com/dawson-cst-cohort-2026/520/section2/teams/TeamM-23-ChristianHaiderRyan/520-project-bui-ahmed-graceffa/issues"
   },
-  "homepage": "https://gitlab.com/dawson-cst-cohort-2026/520/section2/teams/TeamM-23-ChristianHaiderRyan/520-project-bui-ahmed-graceffa#readme"
+  "homepage": "https://gitlab.com/dawson-cst-cohort-2026/520/section2/teams/TeamM-23-ChristianHaiderRyan/520-project-bui-ahmed-graceffa#readme",
+  "dependencies": {
+    "mongodb": "^6.20.0"
+  }
 }
