@@ -39,6 +39,9 @@ class DB {
   async setCollection(collectionName) {
     instance.collection = await instance.db.collection(collectionName);
   }
+  async insertMany(data){
+    return await collection.insertMany(data)
+  }
   //close the connection when gracefully shutting down
   async close() {
     await instance.mongoClient.close();
