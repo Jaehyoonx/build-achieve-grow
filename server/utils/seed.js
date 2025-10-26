@@ -10,7 +10,8 @@ try {
   await db.connect('bagdb');
   // TODO set the collection
   await db.setCollection("headlines");
-
+  //clear old data since everytime u run db it might add on from what already exists
+  await db.collection.deleteMany({});
   //will read all headlines
   const allHeadlines = ['cnbc_headlines.csv', 'guardian_headlines.csv', 'reuters_headlines.csv'];
 
@@ -33,6 +34,7 @@ try {
 
 
 await db.setCollection("stocks");
+await db.collection.deleteMany({});
 //-------------------Stock section---------------------------------------
 
 //This will get all csv files in stocks dir
@@ -48,11 +50,25 @@ let allStockFiles = await fs.readdir('./data/stocks');
     // use to test result
   //console.log(records);
 }
-
-
-
 //-----------------------END OF THE Stock CSV FILE READ------------------
 
+await db.setCollection("etfs");
+await db.collection.deleteMany({});
+//-------------------etfs section---------------------------------------
+//This will get all csv files in stocks dir
+let allETFFiles = await fs.readdir('./data/etfs');
+  for(const filename of allETFFiles){
+    const fileContent = await fs.readFile(`./data/etfs/${filename}`, `utf8`)
+    const records = parse(fileContent, {      
+      columns: true, //This makes it use the first line as headers
+      skip_empty_lines: true, //Skips empty line
+      delimiter: ',' //Coloumn separator
+    });
+    await db.collection.insertMany(records);
+    // use to test result
+  //console.log(records);
+}
+//-----------------------END OF THE etfs CSV FILE READ------------------
 } catch (e) {
   console.error('could not seed');
   console.dir(e);
