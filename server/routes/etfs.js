@@ -15,7 +15,7 @@ router.get('/etfs', async  (req, res) =>{
 });
 
 //Gets a specific one
-router.get('/api/etfs/:source', async  (req, res) =>{
+router.get('/etfs/:source', async  (req, res) =>{
   await db.setCollection('etfs');
   res.status(500).send('Not implemented yet');
 });
