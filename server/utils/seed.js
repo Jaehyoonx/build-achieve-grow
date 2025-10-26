@@ -14,7 +14,7 @@ try {
   
   //------------ONE CSV FILE READ--(cnbc)-----READ THROUGH my comments to understand--------------
   const fileContent = await fs.readFile('./data/cnbc_headlines.csv', 'utf8')
-  const records = parse(fileContent, {
+  const records = parse(fileContent, { 
   columns: true, //This makes it use the first line as headers
   skip_empty_lines: true, //Skips empty line
   delimiter: ',' //Coloumn separator
