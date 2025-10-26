@@ -1,6 +1,8 @@
 import express from 'express';
 import { db } from '../db/db.js';
-//Since this is a router file and not the main it has to have this (Haider and Ryan)
+import headlineRoute from './routes/headlines.js';
+import etfsRoute from './routes/etfs.js';
+import stockRoute from './routes/stocks.js';
 const app = express();
 const port = 3000;
 
@@ -12,8 +14,12 @@ const port = 3000;
 
 async function startServer(){
   await db.connect('bagdb');
+
+  app.use('/api', headlineRoute);
+  app.use('/api', etfsRoute);
+  app.use('/api', stockRoute);
   try {
-    const server = router.listen(port, () => {
+    const server = app.listen(port, () => {
       console.error(`Example app app listening at http://localhost:${port}`);
     });
     //SIGTERM doesn't work on Windows. This works when the server is a Unix process and we `kill` it
