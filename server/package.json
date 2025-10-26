@@ -2,6 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "mocha --timeout 10000"
   },
@@ -20,6 +21,7 @@
     "supertest": "^7.1.4"
   },
   "dependencies": {
+    "csv-parse": "^6.1.0",
     "express": "^5.1.0",
     "mongodb": "^6.20.0"
   }
