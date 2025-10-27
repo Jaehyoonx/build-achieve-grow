@@ -21,7 +21,8 @@ router.get('/stocks', async  (req, res) =>{
 
     // This will go in the collection and find everything (no filter for now)
     // and turn it into an array and store it in stocks
-    const stocks = await db.collection.find({}).toArray();
+    const limit = parseInt(req.query.limit) || 0;
+    const stocks = await db.collection.find({}).limit(limit).toArray();
 
     res.json(stocks);
   } catch (error) {
