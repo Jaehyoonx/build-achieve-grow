@@ -20,9 +20,10 @@ router.get('/headlines', async  (req, res) =>{
   }
 });
 
+//Not implemented
 router.get('/headlines/:source', async  (req, res) =>{
   await db.setCollection('headlines');
-  res.status(500).send('Not implemented yet');
+  res.status(501).send('Not implemented yet');
 });
 //-------------End of Header senction-------------
   
