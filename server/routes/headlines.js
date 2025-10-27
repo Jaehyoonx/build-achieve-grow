@@ -3,12 +3,6 @@ import { db } from '../db/db.js';
 //Since this is a router file and not the main it has to have this (Haider and Ryan)
 const router = express.Router();
 
-//TODO Haider I left this for u
-//app.use(express.static('ADD CLIENT STUFF HERE'));
-
-
-
-
 await db.connect('bagdb');
 
 //---------------Header section--------------------

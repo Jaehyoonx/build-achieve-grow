@@ -6,11 +6,7 @@ import stockRoute from './routes/stocks.js';
 const app = express();
 const port = 3000;
 
-//TODO Haider I left this for u
-//app.use(express.static('ADD CLIENT STUFF HERE'));
-
-
-
+app.use(express.static('../client/dist'));
 
 async function startServer(){
   await db.connect('bagdb');
