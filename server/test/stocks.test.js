@@ -1,0 +1,12 @@
+import request from 'supertest';
+import { expect } from 'chai';
+import app from '../api.js';
+
+// Test the /api/stocks endpoint
+describe('GET /api/stocks', () => {
+  it('should return an array of stocks', async () => {
+    const res = await request(app).get('/api/stocks?limit=5');
+    expect(res.status).to.equal(200);
+    expect(res.body).to.be.an('array');
+  });
+});
