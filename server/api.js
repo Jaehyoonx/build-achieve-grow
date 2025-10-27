@@ -1,5 +1,5 @@
 import express from 'express';
-import { db } from '../db/db.js';
+import { db } from './db/db.js';
 import headlineRoute from './routes/headlines.js';
 import etfsRoute from './routes/etfs.js';
 import stockRoute from './routes/stocks.js';
