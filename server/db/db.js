@@ -40,7 +40,7 @@ class DB {
     instance.collection = await instance.db.collection(collectionName);
   }
   async insertMany(data){
-    return await collection.insertMany(data);
+    return await instance.collection.insertMany(data);
   }
   //close the connection when gracefully shutting down
   async close() {
