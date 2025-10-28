@@ -60,7 +60,7 @@ lint-client:
   stage: lint 
   dependencies: [build]
   script:
-    - cd metro-client && ./node_modules/eslint/bin/eslint.js --ext js,jsx,mjs,cjs .
+    - cd client && ./node_modules/eslint/bin/eslint.js --ext js,jsx,mjs,cjs .
   allow_failure: false
 
 test:
