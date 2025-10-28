@@ -2,7 +2,6 @@ import express from 'express';
 import { db } from '../db/db.js';
 const router = express.Router();
 
-await db.connect('bagdb');
 //-------------ETFS section-------------
 //Not implemented
 router.get('/etfs', async  (req, res) =>{

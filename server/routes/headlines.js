@@ -3,8 +3,6 @@ import { db } from '../db/db.js';
 //Since this is a router file and not the main it has to have this (Haider and Ryan)
 const router = express.Router();
 
-await db.connect('bagdb');
-
 //---------------Header section--------------------
 //This one is fully implemented
 router.get('/headlines', async  (req, res) =>{
