@@ -12,8 +12,8 @@ workflow:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 stages:
-  - lint
-  - build 
+  - build
+  - lint 
   - test
 
 build:
