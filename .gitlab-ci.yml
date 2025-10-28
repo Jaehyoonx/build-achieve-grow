@@ -1,0 +1,77 @@
+# use a specific version that matches your dev/prod environment
+image: node:24-bookworm-slim
+
+
+workflow:
+  rules:
+  # commit made to the default branch (usually main)
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH   # usually "main"
+  # commit made to the staging branch
+    - if: $CI_COMMIT_BRANCH == "staging"
+  # a merge request
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+stages:
+  - lint
+  - build 
+  - test
+
+build:
+  stage: build
+  script:
+    # Tell npm to cache modules in ./.npm (default is ~/.npm but when running a script
+    # in GitLab CI we need to keep everything is the project root)
+    # npm ci stands for "clean install" and it relies on package-lock.json. 
+    # It is often used in automation to
+    # make sure we create a reproducible testing environment (no stale dependencies from previous jobs)
+    # The --prefer-offline option makes npm avoid fetching a module from the package repository
+    # unless it's missing from the cache
+    # --cache designates a directory to store compressed packages in ./.npm to avoid downloading them again
+    # whereas node_modules is where the extracted package source code is stored
+    - cd server && npm ci --cache server/.npm --prefer-offline && cd ..
+    - cd client && npm ci --cache client/.npm --prefer-offline && cd ..
+  # Cache modules in between jobs to avoid re-downloading them
+  # https://docs.gitlab.com/ee/ci/caching/#cache-nodejs-dependencies
+  cache:  
+    # Look up the cache by the commit ref (i.e. only jobs for same commit share cache)
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      # The path to cache
+      - server/.npm/
+      - client/.npm/
+  # set `node_modules` as an artifact so that the test job can use it
+  artifacts:
+    expire_in: 1 days
+    when: on_success
+    paths:
+      - server/node_modules/
+      - client/node_modules/
+
+# run lint on server js files
+lint-server:
+  stage: lint
+  dependencies: [build]
+  script:
+    - cd server && ./node_modules/eslint/bin/eslint.js --ext js,jsx,mjs,cjs . 
+  allow_failure: false
+
+# run lint on client js files
+lint-client:
+  stage: lint 
+  dependencies: [build]
+  script:
+    - cd metro-client && ./node_modules/eslint/bin/eslint.js --ext js,jsx,mjs,cjs .
+  allow_failure: false
+
+test:
+  stage: test
+  dependencies: [build]
+  script:
+    - cd server
+    - npm run test
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+      - server/test-results.xml
+
