@@ -33,7 +33,7 @@ class DB {
     instance.db = await instance.mongoClient.db(dbName);
     // Send a ping to confirm a successful connection
     await instance.mongoClient.db(dbName).command({ ping: 1 });
-    console.log('Successfully connected to MongoDB database ' + dbName);
+    // console.log('Successfully connected to MongoDB database ' + dbName);
   }
   //set the collection desired
   async setCollection(collectionName) {
