@@ -41,3 +41,9 @@ describe('GET /api/headlines', () => {
     sinon.restore();
   });
 });
+
+describe.skip('GET /api/headlines/:source', () => {
+  it('should return headlines filtered by source', async () => {
+    // TODO: implement in Phase 2
+  });
+});
