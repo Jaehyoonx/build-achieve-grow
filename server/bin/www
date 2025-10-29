@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
 import app, { port } from '../api.js';
+import { db } from '../db/db.js';
+
+await db.connect('bagdb');
 
 const server = app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
