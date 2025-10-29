@@ -70,9 +70,5 @@ test:
     - cd server
     - touch .env # create empty .env file for tests
     - npm run test
-  artifacts:
-    when: always
-    expire_in: 1 week
-    paths:
-      - server/test-results.xml
+
 
