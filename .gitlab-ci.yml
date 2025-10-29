@@ -68,6 +68,7 @@ test:
   dependencies: [build]
   script:
     - cd server
+    - touch .env # create empty .env file for tests
     - npm run test
   artifacts:
     when: always
