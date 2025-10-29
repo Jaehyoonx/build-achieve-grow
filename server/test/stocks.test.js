@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import app from '../api.js';
 import { db } from '../db/db.js';
 
+
 // Test the /api/stocks endpoint
 describe('GET /api/stocks', () => {
   before(() => {
@@ -44,5 +45,23 @@ describe('GET /api/stocks', () => {
 
   after(() => {
     sinon.restore();
+  });
+});
+
+describe.skip('GET /api/stocks/:symbol', () => {
+  it('should return stock data for a specific symbol', async () => {
+    // TODO: Implement in Phase 2
+  });
+});
+
+describe.skip('GET /api/stocks/:symbol/latest', () => {
+  it('should return the latest stock data for a specific symbol', async () => {
+    // TODO: Implement in Phase 2
+  });
+});
+
+describe.skip('GET /api/stocks/search?start=&end=', () => {
+  it('should return stock data within a date range', async () => {
+    // TODO: Implement in Phase 2
   });
 });
