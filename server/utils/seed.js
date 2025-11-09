@@ -17,6 +17,7 @@ try {
 
   //------------Many CSV FILE READ--(headLines ONLY)-----READ THROUGH my comments to understand----
 
+ 
   const headLinePromises = allHeadlines.map(async filename => {
     const fileContent = await fs.readFile(`./data/${filename}`, `utf8`);
     const records = parse(fileContent, {      
@@ -24,6 +25,9 @@ try {
       columns: true, 
       //Coloumn separator 
       delimiter: ',' 
+    });
+    records.forEach(record => {
+      record.fileName = filename.replace('.csv', '');
     });
     return records;
   });
@@ -53,6 +57,9 @@ try {
       //Coloumn separator 
       delimiter: ',' 
     });
+    records.forEach(record => {
+      record.fileName = filename.replace('.csv', '');
+    });
     return records;
   });
   //Flat makes the arrays turn to be [{}, {}] which Mongo accepts, but without it, 
@@ -75,6 +82,9 @@ try {
       columns: true, 
       //Coloumn separator 
       delimiter: ',' 
+    });
+    records.forEach(record => {
+      record.fileName = filename.replace('.csv', '');
     });
     return records;
   });
