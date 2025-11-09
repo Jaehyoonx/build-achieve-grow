@@ -30,11 +30,33 @@ router.get('/etfs', async (req, res) => {
   }
 });
 
-//Gets a specific one
-//Not implemented
-router.get('/etfs/:source', async  (req, res) =>{
-  await db.setCollection('etfs');
-  res.status(501).send('Not implemented yet');
+/*
+  GET /api/etfs/:source
+  Returns ETF data for a specific source.
+  Example: /api/etfs/yahoo or /api/etfs/nasdaq
+  
+  Here, "source" refers to the dataset origin field in our ETF collection.
+  We search for a single document where source matches the URL parameter.
+  
+  If nothing is found, return 404 to indicate the ETF source does not exist.
+*/
+router.get('/etfs/:source', async (req, res) => {
+  try {
+    await db.setCollection('etfs');
+    const { source } = req.params;
+
+    // Find one ETF document that matches the given source
+    const etf = await db.collection.findOne({ source });
+
+    if (!etf) {
+      return res.status(404).send('ETF not found');
+    }
+
+    res.status(200).json(etf);
+  } catch (error) {
+    console.error('Error fetching ETF:', error);
+    res.status(500).json({ error: 'Failed to fetch ETF' });
+  }
 });
 //-------------end of ETFS section-------------
 
