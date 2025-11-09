@@ -2,8 +2,6 @@ import express from 'express';
 import { db } from '../db/db.js';
 const router = express.Router();
 
-await db.connect('bagdb');
-
 //----------Stock Endpoints-----------------------
 
 //Ryan I left this for you good luck!!!!!

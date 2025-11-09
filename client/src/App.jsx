@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import './App.css'
+import './App.css';
 import HeadlineList from './components/HeadlineList';
 
 function App() {
@@ -11,4 +10,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

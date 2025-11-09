@@ -1,5 +1,6 @@
 // Credits: Maja Frydrychowicz
-// https://gitlab.com/dawson-cst-cohort-2026/520/assignments/assignment2/-/blob/main/metro-client/eslint.config.js
+// From https://gitlab.com/dawson-cst-cohort-2026/520/assignments/assignment2
+// In metro-client dir 
 import js from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import globals from 'globals';
