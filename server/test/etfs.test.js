@@ -36,3 +36,45 @@ describe('GET /api/etfs', () => {
     sinon.restore();
   });
 });
+
+// Tests for /api/etfs/:source
+describe('GET /api/etfs/:source', () => {
+  beforeEach(() => {
+    sinon.stub(db, 'connect').resolves();
+    sinon.stub(db, 'setCollection').resolves();
+
+    // Mock db.collection.findOne
+    db.collection = {
+      findOne: sinon.stub().callsFake(({ source }) => {
+        if (source === 'yahoo') {
+          return Promise.resolve({
+            _id: 1,
+            source: 'yahoo',
+            name: 'Vanguard S&P 500 ETF'
+          });
+        }
+        return Promise.resolve(null);
+      })
+    };
+  });
+
+  it('should return a specific ETF by source', async () => {
+    const res = await request(app).get('/api/etfs/yahoo');
+    expect(res.status).to.equal(200);
+    expect(res.body).to.deep.equal({
+      _id: 1,
+      source: 'yahoo',
+      name: 'Vanguard S&P 500 ETF'
+    });
+  });
+
+  it('should return 404 if ETF not found', async () => {
+    const res = await request(app).get('/api/etfs/unknownsource');
+    expect(res.status).to.equal(404);
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+});
+
