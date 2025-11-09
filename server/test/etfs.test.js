@@ -21,3 +21,18 @@ describe('GET /api/etfs', () => {
       })
     };
   });
+
+  it('should return an array of ETFs', async () => {
+    const res = await request(app).get('/api/etfs');
+    expect(res.status).to.equal(200);
+    expect(res.body).to.be.an('array');
+    expect(res.body).to.deep.equal([
+      { _id: 1, source: 'yahoo', name: 'Vanguard S&P 500 ETF' },
+      { _id: 2, source: 'nasdaq', name: 'iShares Core MSCI World ETF' }
+    ]);
+  });
+
+  after(() => {
+    sinon.restore();
+  });
+});
