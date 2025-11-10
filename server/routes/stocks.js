@@ -37,8 +37,21 @@ router.get('/stocks', async  (req, res) =>{
   Example: /api/stocks/AAPL
 */
 router.get('/stocks/:symbol', async  (req, res) =>{
-  await db.setCollection('stocks');
-  res.status(501).send('Not implemented yet');
+  try {
+    await db.setCollection('stocks');
+    const symbol = req.params.symbol.toUpperCase();
+
+    const stockDataForSymbol = await db.collection.find({ symbol: symbol }).toArray();
+
+    if (stockDataForSymbol.length === 0) {
+      return res.status(404).json({ error: 'Symbol not found' });
+    }
+
+    res.json(stockDataForSymbol);
+  } catch (error) {
+    console.error('Error fetching stock:', error);
+    res.status(404).json({ error: 'Failed to fetch stock data' });
+  }
 });
 
 /*
