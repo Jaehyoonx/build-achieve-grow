@@ -38,7 +38,11 @@ export default function HeadlineList({ year }) {
       <h2>Headlines from {year}</h2>
       <ul>
         {headlines.map((headline, i) => 
-          <li key={i}>{JSON.stringify(headline)}</li>
+          <li key={i}>
+            <h3>{headline.Headlines}</h3>
+            <p>{headline.Time}</p>
+            <p>{headline.Description}</p>
+          </li>
         )}
       </ul>
     </div>

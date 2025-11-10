@@ -13,7 +13,7 @@ try {
   //clear old data since everytime u run db it might add on from what already exists
   await db.collection.deleteMany({});
   //will read all headlines
-  const allHeadlines = ['cnbc_headlines.csv', 'guardian_headlines.csv', 'reuters_headlines.csv'];
+  const allHeadlines = ['cnbc_headlines.csv', 'reuters_headlines.csv'];
 
   //------------Many CSV FILE READ--(headLines ONLY)-----READ THROUGH my comments to understand----
 
