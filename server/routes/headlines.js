@@ -14,14 +14,22 @@ router.get('/headlines', async  (req, res) =>{
     res.json(headlines);
   } catch(error) {
     console.error('cant fetch', error);
-    res.status(404).json({error: 'Failed to fetch headline'});
+    res.status(500).json({error: 'Failed to fetch headline'});
   }
 });
 
-//Not implemented
+//This route will get all headlines from a specific fileName 
 router.get('/headlines/:source', async  (req, res) =>{
-  await db.setCollection('headlines');
-  res.status(501).send('Not implemented yet');
+  try{ 
+    await db.setCollection('headlines');
+    const { source } = req.params;
+
+    const headlines = await db.collection.find({fileName: source}).toArray();
+    res.json(headlines);
+  }catch(error){
+    console.error('cant fetch', error);
+    res.status(500).json({error: 'Failed to fetch headline'});
+  }
 });
 //-------------End of Header senction-------------
   
