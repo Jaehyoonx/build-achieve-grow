@@ -43,5 +43,41 @@ export default function NewsFeed() {
   );
   });
 
-  return <div></div>;
+  if (loading) {
+    return <div> Loading Headlines </div>;
+  }
+
+  return <div>
+    <h2>News Feed</h2>
+      <div>
+        <label>Source: </label>
+        <select value={selectedFile} onChange={(e) => setSelectedFile(e.target.value)}>
+          <option value="all"> All Sources</option>
+          <option value="cnbc_headlines"> CNBC</option>
+          <option value="reuters_headlines">Reuters</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Search: </label>
+        <input
+          type="text"
+          placeholder='Search Headlines'
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          />
+      </div>
+      <div>
+        <ul>
+            {filtered.map((headline, i) => (
+              <li key={i}>
+                <h3>{headline.Headlines}</h3>
+                <p><small>{headline.Time}</small></p>
+                <p>{headline.Description}</p>
+                <p><em>Source: {headline.fileName}</em></p>
+              </li>
+            ))}
+          </ul>
+      </div>
+  </div>;
 }
