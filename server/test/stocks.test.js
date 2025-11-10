@@ -7,7 +7,7 @@ import { db } from '../db/db.js';
 
 // Test the /api/stocks endpoint
 describe('GET /api/stocks', () => {
-  before(() => {
+  beforeEach(() => {
     // Stub DB connection methods so no real MongoDB calls happen
     sinon.stub(db, 'connect').resolves();
     sinon.stub(db, 'setCollection').resolves();
@@ -23,6 +23,10 @@ describe('GET /api/stocks', () => {
         })
       })
     };
+  });
+
+  afterEach(() => {
+    sinon.restore();
   });
 
   it('should return an array of stocks', async () => {
@@ -42,14 +46,10 @@ describe('GET /api/stocks', () => {
       expect(res.body[0]).to.have.property('_id');
     }
   });
-
-  after(() => {
-    sinon.restore();
-  });
 });
 
 describe('GET /api/stocks/:symbol', () => {
-  before(() => {
+  beforeEach(() => {
     // Stub DB connection methods so no real MongoDB calls happen
     sinon.stub(db, 'connect').resolves();
     sinon.stub(db, 'setCollection').resolves();
@@ -65,18 +65,19 @@ describe('GET /api/stocks/:symbol', () => {
       })
     };
   });
+  
+  afterEach(() => sinon.restore());
+
   it('should return all entries for a given symbol', async () => {
     const res = await request(app).get('/api/stocks/AAPL');
     expect(res.status).to.equal(200);
     expect(res.body).to.be.an('array');
     expect(res.body[0].symbol).to.equal('AAPL');
   });
-
-  after(() => sinon.restore());
 });
 
 describe('GET /api/stocks/:symbol/latest', () => {
-  before(() => {
+  beforeEach(() => {
     sinon.stub(db, 'connect').resolves();
     sinon.stub(db, 'setCollection').resolves();
 
@@ -92,18 +93,38 @@ describe('GET /api/stocks/:symbol/latest', () => {
       })
     };
   });
+
+  afterEach(() => sinon.restore());
+
   it('should return the latest stock entry', async () => {
     const res = await request(app).get('/api/stocks/AAPL/latest');
     expect(res.status).to.equal(200);
     expect(res.body.symbol).to.equal('AAPL');
     expect(res.body.price).to.equal(200);
   });
-
-  after(() => sinon.restore());
 });
 
-describe.skip('GET /api/stocks/search?start=&end=', () => {
+describe('GET /api/stocks/search?start=&end=', () => {
+  beforeEach(() => {
+    sinon.stub(db, 'connect').resolves();
+    sinon.stub(db, 'setCollection').resolves();
+
+    db.collection = {
+      find: sinon.stub().returns({
+        toArray: () =>
+          Promise.resolve([
+            { _id: 1, symbol: 'AAPL', date: '2023-01-05', price: 150 }
+          ])
+      })
+    };
+  });
+
+  afterEach(() => sinon.restore());
+
   it('should return stock data within a date range', async () => {
-    // TODO: Implement in Phase 2
+    const res = await request(app).get('/api/stocks/search?start=2023-01-01&end=2023-01-31');
+    expect(res.status).to.equal(200);
+    expect(res.body).to.be.an('array');
+    expect(res.body[0].date).to.equal('2023-01-05');
   });
 });
