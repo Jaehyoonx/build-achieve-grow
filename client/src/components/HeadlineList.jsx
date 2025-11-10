@@ -19,7 +19,7 @@ export default function HeadlineList({ year }) {
         const filetered = data.filter(desired => {
           const desiredYear = desired.Time.match(/\d{4}/)[0];
           return desiredYear === year;
-        })
+        });
         setHeadlines(filetered);
       } catch (err) {
         console.error('Error fetching headlines:', err);
@@ -28,11 +28,14 @@ export default function HeadlineList({ year }) {
       }
     };
 
-   if(year){
-    fetchHeadlines();
-   } 
+    if(year){
+      fetchHeadlines();
+    } 
   }, [year]);
 
+  if (loading) {
+    return <div> Loading Headlines </div>;
+  }
   return (
     <div>
       <h2>Headlines from {year}</h2>
