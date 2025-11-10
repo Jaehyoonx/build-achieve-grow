@@ -105,6 +105,11 @@ router.get('/stocks/search', async  (req, res) =>{
       return res.status(400).json({ error: 'start and end query parameters are required' });
     }
 
+    /* 
+      TODO: Validate date format (YYYY-MM-DD) if necessary 
+      and start is before end (Add error handling issue)
+    */
+
     /*
       Find all stock entries where date is between start and end (inclusive)
       Using $gte (greater than or equal) and $lte (less than or equal) operators.
