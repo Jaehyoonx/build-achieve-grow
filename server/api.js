@@ -1,8 +1,5 @@
 import express from 'express';
-<<<<<<< Updated upstream
-=======
-import { db } from './db/db.js';
->>>>>>> Stashed changes
+
 import headlineRoute from './routes/headlines.js';
 import etfsRoute from './routes/etfs.js';
 import stockRoute from './routes/stocks.js';
