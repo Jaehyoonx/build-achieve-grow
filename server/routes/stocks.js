@@ -90,8 +90,29 @@ router.get('/stocks/:symbol/latest', async  (req, res) =>{
   Example: /api/stocks/search?start=2023-01-01&end=2023-01-31
 */
 router.get('/stocks/search', async  (req, res) =>{
-  await db.setCollection('stocks');
-  res.status(501).send('Not implemented yet');
+  try {
+    await db.setCollection('stocks');
+
+    const { start, end } = req.query;
+
+    if (!start || !end) {
+      return res.status(400).json({ error: 'start and end query parameters are required' });
+    }
+
+    /*
+      Find all stock entries where date is between start and end (inclusive)
+      Using $gte (greater than or equal) and $lte (less than or equal) operators.
+      Source: https://stackoverflow.com/questions/2943222/find-objects-between-two-dates-mongodb
+    */
+    const searchedData = await db.collection.find({
+      date: { $gte: start, $lte: end }
+    }).toArray();
+
+    res.json(searchedData);
+  } catch (error) {
+    console.error('Error fetching stock data in date range:', error);
+    res.status(404).json({ error: 'Failed to fetch stock data in date range' });
+  }
 });
 
 //-------------end of Stock section-------------
