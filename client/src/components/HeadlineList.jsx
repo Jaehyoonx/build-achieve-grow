@@ -42,6 +42,7 @@ export default function HeadlineList({ year }) {
             <h3>{headline.Headlines}</h3>
             <p>{headline.Time}</p>
             <p>{headline.Description}</p>
+            <p></p>
           </li>
         )}
       </ul>
