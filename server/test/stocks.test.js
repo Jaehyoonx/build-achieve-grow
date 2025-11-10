@@ -75,10 +75,31 @@ describe('GET /api/stocks/:symbol', () => {
   after(() => sinon.restore());
 });
 
-describe.skip('GET /api/stocks/:symbol/latest', () => {
-  it('should return the latest stock data for a specific symbol', async () => {
-    // TODO: Implement in Phase 2
+describe('GET /api/stocks/:symbol/latest', () => {
+  before(() => {
+    sinon.stub(db, 'connect').resolves();
+    sinon.stub(db, 'setCollection').resolves();
+
+    // simulate newest symbol stock entry first (sorted DESC)
+    db.collection = {
+      find: sinon.stub().returns({
+        sort: () => ({
+          limit: () => ({
+            toArray: () =>
+              Promise.resolve([{ _id: 99, symbol: 'AAPL', price: 200, date: '2025-11-09' }])
+          })
+        })
+      })
+    };
   });
+  it('should return the latest stock entry', async () => {
+    const res = await request(app).get('/api/stocks/AAPL/latest');
+    expect(res.status).to.equal(200);
+    expect(res.body.symbol).to.equal('AAPL');
+    expect(res.body.price).to.equal(200);
+  });
+
+  after(() => sinon.restore());
 });
 
 describe.skip('GET /api/stocks/search?start=&end=', () => {
