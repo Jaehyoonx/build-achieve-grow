@@ -60,8 +60,28 @@ router.get('/stocks/:symbol', async  (req, res) =>{
   Example: /api/stocks/AAPL/latest
 */
 router.get('/stocks/:symbol/latest', async  (req, res) =>{
-  await db.setCollection('stocks');
-  res.status(501).send('Not implemented yet');
+  try {
+    await db.setCollection('stocks');
+    const symbol = req.params.symbol.toUpperCase();
+
+    /*
+      Find the latest entry by sorting by date descending and limiting to 1
+      -1 indicates descending order
+      Source: 
+      https://stackoverflow.com/questions/13847766/how-to-sort-a-collection-by-date-in-mongodb
+    */
+
+    const latest = await db.collection.find({ symbol }).sort({ date: -1 }).limit(1).toArray();
+
+    if (latest.length === 0) {
+      return res.status(404).json({ error: 'Symbol not found' });
+    }
+
+    res.json(latest[0]);
+  } catch (error) {
+    console.error('Error fetching latest:', error);
+    res.status(404).json({ error: 'Failed to fetch latest stock data' });
+  }
 }); 
 
 /*
