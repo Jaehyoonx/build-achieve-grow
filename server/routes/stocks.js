@@ -25,7 +25,8 @@ router.get('/stocks', async  (req, res) =>{
     res.json(stocks);
   } catch (error) {
     console.error('Error fetching stocks:', error);
-    res.status(404).json({error: 'Failed to fetch stocks'});
+    // Throw 500 for other errors, usually internal server issues
+    res.status(500).json({error: 'Failed to fetch stocks'});
   }
 });
 
@@ -44,13 +45,15 @@ router.get('/stocks/:symbol', async  (req, res) =>{
     const stockDataForSymbol = await db.collection.find({ symbol: symbol }).toArray();
 
     if (stockDataForSymbol.length === 0) {
+      // Throw 404 if no data found for the symbol
       return res.status(404).json({ error: 'Symbol not found' });
     }
 
     res.json(stockDataForSymbol);
   } catch (error) {
     console.error('Error fetching stock:', error);
-    res.status(404).json({ error: 'Failed to fetch stock data' });
+    // Throw 500 for other errors, usually internal server issues
+    res.status(500).json({ error: 'Failed to fetch stock data' });
   }
 });
 
@@ -74,13 +77,15 @@ router.get('/stocks/:symbol/latest', async  (req, res) =>{
     const latest = await db.collection.find({ symbol }).sort({ date: -1 }).limit(1).toArray();
 
     if (latest.length === 0) {
+      // Throw 404 if no data found for the symbol
       return res.status(404).json({ error: 'Symbol not found' });
     }
 
     res.json(latest[0]);
   } catch (error) {
     console.error('Error fetching latest:', error);
-    res.status(404).json({ error: 'Failed to fetch latest stock data' });
+    // Throw 500 for other errors, usually internal server issues
+    res.status(500).json({ error: 'Failed to fetch latest stock data' });
   }
 }); 
 
@@ -96,6 +101,7 @@ router.get('/stocks/search', async  (req, res) =>{
     const { start, end } = req.query;
 
     if (!start || !end) {
+      // Throw 400 if start or end query parameters are missing (Bad Request)
       return res.status(400).json({ error: 'start and end query parameters are required' });
     }
 
@@ -111,7 +117,8 @@ router.get('/stocks/search', async  (req, res) =>{
     res.json(searchedData);
   } catch (error) {
     console.error('Error fetching stock data in date range:', error);
-    res.status(404).json({ error: 'Failed to fetch stock data in date range' });
+    // Throw 500 for other errors, usually internal server issues
+    res.status(500).json({ error: 'Failed to fetch stock data in date range' });
   }
 });
 
