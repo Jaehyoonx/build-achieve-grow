@@ -42,8 +42,37 @@ describe('GET /api/headlines', () => {
   });
 });
 
-describe.skip('GET /api/headlines/:source', () => {
+describe('GET /api/headlines/:source', () => {
+  before(() => {
+    sinon.stub(db, 'connect').resolves();
+    sinon.stub(db, 'setCollection').resolves();
+
+    db.collection = {
+      find: sinon.stub().returns({
+        toArray: () => Promise.resolve([
+          {
+            _id: { $oid: '68fe67b4cb1417510d1a90a1' },
+            Headlines: 'Cramer\'s lightning round: I would own Teradyne',
+            Time: '7:33 PM ET Fri, 17 July 2020',
+            Description: '"Mad Money" host Jim Cramer rings the lightning round bell.',
+            fileName: 'cnbc_headlines'
+          }
+        ])
+      })
+    };
+  });
+
   it('should return headlines filtered by source', async () => {
-    // TODO: implement in Phase 2
+    const response = await request(app).
+      get('/api/headlines/cnbc_headlines').
+      expect(200);
+
+    expect(response.body).to.be.an('array');
+    response.body.forEach(headline => {
+      expect(headline.fileName).to.equal('cnbc_headlines');
+    });
+  });
+  after(() => {
+    sinon.restore();
   });
 });
