@@ -16,7 +16,7 @@ export default function HeadlineList({ year }) {
         //This regex pattern just works as followed it gets digites from 0-9
         //gets it {4} times
         //Has to match exactly 4 digits
-        const filetered = data.fetch(desired => {
+        const filetered = data.filter(desired => {
           const desiredYear = desired.Time.match(/\d{4}/)[0];
           return desiredYear === year;
         })
@@ -28,12 +28,14 @@ export default function HeadlineList({ year }) {
       }
     };
 
+   if(year){
     fetchHeadlines();
-  }, []);
+   } 
+  }, [year]);
 
   return (
     <div>
-      <h2>Headlines</h2>
+      <h2>Headlines from {year}</h2>
       <ul>
         {headlines.map((headline, i) => 
           <li key={i}>{JSON.stringify(headline)}</li>
