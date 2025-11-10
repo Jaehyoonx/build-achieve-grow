@@ -48,10 +48,31 @@ describe('GET /api/stocks', () => {
   });
 });
 
-describe.skip('GET /api/stocks/:symbol', () => {
-  it('should return stock data for a specific symbol', async () => {
-    // TODO: Implement in Phase 2
+describe('GET /api/stocks/:symbol', () => {
+  before(() => {
+    // Stub DB connection methods so no real MongoDB calls happen
+    sinon.stub(db, 'connect').resolves();
+    sinon.stub(db, 'setCollection').resolves();
+
+    // Mock the collection with find().toArray()
+    db.collection = {
+      find: sinon.stub().returns({
+        toArray: () => 
+          Promise.resolve([
+            { _id: 1, symbol: 'AAPL', price: 180 },
+            { _id: 2, symbol: 'GOOG', price: 140 }
+          ])
+      })
+    };
   });
+  it('should return all entries for a given symbol', async () => {
+    const res = await request(app).get('/api/stocks/AAPL');
+    expect(res.status).to.equal(200);
+    expect(res.body).to.be.an('array');
+    expect(res.body[0].symbol).to.equal('AAPL');
+  });
+
+  after(() => sinon.restore());
 });
 
 describe.skip('GET /api/stocks/:symbol/latest', () => {
