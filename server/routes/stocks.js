@@ -25,7 +25,8 @@ router.get('/stocks', async  (req, res) =>{
     res.json(stocks);
   } catch (error) {
     console.error('Error fetching stocks:', error);
-    res.status(404).json({error: 'Failed to fetch stocks'});
+    // Throw 500 for other errors, usually internal server issues
+    res.status(500).json({error: 'Failed to fetch stocks'});
   }
 });
 
@@ -37,8 +38,23 @@ router.get('/stocks', async  (req, res) =>{
   Example: /api/stocks/AAPL
 */
 router.get('/stocks/:symbol', async  (req, res) =>{
-  await db.setCollection('stocks');
-  res.status(501).send('Not implemented yet');
+  try {
+    await db.setCollection('stocks');
+    const symbol = req.params.symbol.toUpperCase();
+
+    const stockDataForSymbol = await db.collection.find({ symbol: symbol }).toArray();
+
+    if (stockDataForSymbol.length === 0) {
+      // Throw 404 if no data found for the symbol
+      return res.status(404).json({ error: 'Symbol not found' });
+    }
+
+    res.json(stockDataForSymbol);
+  } catch (error) {
+    console.error('Error fetching stock:', error);
+    // Throw 500 for other errors, usually internal server issues
+    res.status(500).json({ error: 'Failed to fetch stock data' });
+  }
 });
 
 /*
@@ -47,8 +63,30 @@ router.get('/stocks/:symbol', async  (req, res) =>{
   Example: /api/stocks/AAPL/latest
 */
 router.get('/stocks/:symbol/latest', async  (req, res) =>{
-  await db.setCollection('stocks');
-  res.status(501).send('Not implemented yet');
+  try {
+    await db.setCollection('stocks');
+    const symbol = req.params.symbol.toUpperCase();
+
+    /*
+      Find the latest entry by sorting by date descending and limiting to 1
+      -1 indicates descending order
+      Source: 
+      https://stackoverflow.com/questions/13847766/how-to-sort-a-collection-by-date-in-mongodb
+    */
+
+    const latest = await db.collection.find({ symbol }).sort({ date: -1 }).limit(1).toArray();
+
+    if (latest.length === 0) {
+      // Throw 404 if no data found for the symbol
+      return res.status(404).json({ error: 'Symbol not found' });
+    }
+
+    res.json(latest[0]);
+  } catch (error) {
+    console.error('Error fetching latest:', error);
+    // Throw 500 for other errors, usually internal server issues
+    res.status(500).json({ error: 'Failed to fetch latest stock data' });
+  }
 }); 
 
 /*
@@ -57,8 +95,36 @@ router.get('/stocks/:symbol/latest', async  (req, res) =>{
   Example: /api/stocks/search?start=2023-01-01&end=2023-01-31
 */
 router.get('/stocks/search', async  (req, res) =>{
-  await db.setCollection('stocks');
-  res.status(501).send('Not implemented yet');
+  try {
+    await db.setCollection('stocks');
+
+    const { start, end } = req.query;
+
+    if (!start || !end) {
+      // Throw 400 if start or end query parameters are missing (Bad Request)
+      return res.status(400).json({ error: 'start and end query parameters are required' });
+    }
+
+    /* 
+      TODO: Validate date format (YYYY-MM-DD) if necessary 
+      and start is before end (Add error handling issue)
+    */
+
+    /*
+      Find all stock entries where date is between start and end (inclusive)
+      Using $gte (greater than or equal) and $lte (less than or equal) operators.
+      Source: https://stackoverflow.com/questions/2943222/find-objects-between-two-dates-mongodb
+    */
+    const searchedData = await db.collection.find({
+      date: { $gte: start, $lte: end }
+    }).toArray();
+
+    res.json(searchedData);
+  } catch (error) {
+    console.error('Error fetching stock data in date range:', error);
+    // Throw 500 for other errors, usually internal server issues
+    res.status(500).json({ error: 'Failed to fetch stock data in date range' });
+  }
 });
 
 //-------------end of Stock section-------------
