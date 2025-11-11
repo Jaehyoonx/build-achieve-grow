@@ -71,4 +71,13 @@ test:
     - touch .env # create empty .env file for tests
     - npm run test
 
+bundlesize:
+  stage: test
+  dependencies: [build]
+  script:
+    - cd client
+    - npm run build
+    - npm run bundlesize
+  # CI should fail if bundle grows too much.
+  allow_failure: false
 
