@@ -23,7 +23,10 @@ router.get('/headlines/:source', async  (req, res) =>{
   try{ 
     await db.setCollection('headlines');
     const { source } = req.params;
-
+    if (source !== 'cnbc_headlines' && source !== 'reuters_headlines'){
+      res.status(400).json({error: 'No Source found'});
+    }
+    
     const headlines = await db.collection.find({fileName: source}).toArray();
     res.json(headlines);
   }catch(error){
@@ -32,6 +35,5 @@ router.get('/headlines/:source', async  (req, res) =>{
   }
 });
 //-------------End of Header senction-------------
-  
 
 export default router;
