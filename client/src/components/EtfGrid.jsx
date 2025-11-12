@@ -15,6 +15,9 @@ export default function EtfGrid() {
     async function fetchEtfs() {
       try {
         setLoading(true);
+        // Fetch up to 50 ETF documents from the backend API.
+        // The "limit=50" query parameter restricts the number of results returned by the server,
+        // preventing excessive data loading and improving initial page performance.
         const response = await fetch('/api/etfs?limit=50');
         const data = await response.json();
         setEtfs(data);
