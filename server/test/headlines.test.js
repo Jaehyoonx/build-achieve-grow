@@ -12,10 +12,12 @@ describe('GET /api/headlines', () => {
     // Stub the "collection" property and its "find" method
     db.collection = {
       find: sinon.stub().returns({
-        toArray: () => Promise.resolve([
-          { _id: 1, title: 'Breaking News', source: 'Daily Times' },
-          { _id: 2, title: 'Tech Stocks Up', source: 'MarketWatch' }
-        ])
+        limit: () => ({
+          toArray: () => Promise.resolve([
+            { _id: 1, title: 'Breaking News', source: 'Daily Times' },
+            { _id: 2, title: 'Tech Stocks Up', source: 'MarketWatch' }
+          ])
+        })
       })
     };
   });
@@ -49,15 +51,17 @@ describe('GET /api/headlines/:source', () => {
 
     db.collection = {
       find: sinon.stub().returns({
-        toArray: () => Promise.resolve([
-          {
-            _id: { $oid: '68fe67b4cb1417510d1a90a1' },
-            Headlines: 'Cramer\'s lightning round: I would own Teradyne',
-            Time: '7:33 PM ET Fri, 17 July 2020',
-            Description: '"Mad Money" host Jim Cramer rings the lightning round bell.',
-            fileName: 'cnbc_headlines'
-          }
-        ])
+        limit: () => ({
+          toArray: () => Promise.resolve([
+            {
+              _id: { $oid: '68fe67b4cb1417510d1a90a1' },
+              Headlines: 'Cramer\'s lightning round: I would own Teradyne',
+              Time: '7:33 PM ET Fri, 17 July 2020',
+              Description: '"Mad Money" host Jim Cramer rings the lightning round bell.',
+              fileName: 'cnbc_headlines'
+            }
+          ])
+        })
       })
     };
   });
