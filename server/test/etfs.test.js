@@ -13,10 +13,13 @@ describe('GET /api/etfs', () => {
     // Mock MongoDB collection find().toArray()
     db.collection = {
       find: sinon.stub().returns({
-        toArray: () => Promise.resolve([
-          { _id: 1, symbol: 'VOO', name: 'Vanguard S&P 500 ETF' },
-          { _id: 2, symbol: 'VTI', name: 'Vanguard Total Stock Market ETF' }
-        ])
+        limit: () => ({
+          toArray: () =>
+            Promise.resolve([
+              { _id: 1, symbol: 'VOO', name: 'Vanguard S&P 500 ETF' },
+              { _id: 2, symbol: 'VTI', name: 'Vanguard Total Stock Market ETF' }
+            ])
+        })
       })
     };
   });
