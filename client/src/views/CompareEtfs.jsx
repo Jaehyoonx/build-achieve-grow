@@ -27,7 +27,7 @@ export default function CompareEtfs() {
           setDataA(jsonA);
           setDataB(jsonB);
         } catch (error) {
-          console.error("Error fetching ETF data:", error);
+          console.error('Error fetching ETF data:', error);
         } finally {
           setLoading(false);
         }
@@ -69,16 +69,16 @@ export default function CompareEtfs() {
         </label>
       </div>
 
-      {dataA.length > 0 && dataB.length > 0 ? (
+      {dataA.length > 0 && dataB.length > 0 ? 
         <CompareChart
           dataA={dataA}
           dataB={dataB}
           symbolA={etfA}
           symbolB={etfB}
         />
-      ) : (
+        : 
         <p>No data available for selected ETFs.</p>
-      )}
+      }
     </div>
   );
 }

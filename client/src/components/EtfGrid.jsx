@@ -19,7 +19,7 @@ export default function EtfGrid({ etfs }) {
 
   return (
     <div className="etf-grid">
-      {etfs.map(etf => (
+      {etfs.map(etf => 
         <EtfCard
           key={etf.symbol}
           symbol={etf.symbol}
@@ -28,7 +28,7 @@ export default function EtfGrid({ etfs }) {
           previousClose={etf.previousClose}
           onClick={() => setSelectedSymbol(etf.symbol)}
         />
-      ))}
+      )}
     </div>
   );
 }

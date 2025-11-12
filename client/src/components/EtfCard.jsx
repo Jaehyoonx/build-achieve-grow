@@ -12,7 +12,7 @@ export default function EtfCard({ symbol, etfName, currentPrice, previousClose, 
     if (previousClose === 0 || previousClose === undefined) return;
 
     const change = currentPrice - previousClose;
-    const percent = (change / previousClose) * 100;
+    const percent = change / previousClose * 100;
 
     let changeText;
     let percentFormatted;
@@ -46,14 +46,14 @@ export default function EtfCard({ symbol, etfName, currentPrice, previousClose, 
 
       <p>Current Price: ${currentPrice?.toFixed(2) ?? 'N/A'}</p>
 
-      {previousClose !== undefined && (
+      {previousClose !== undefined && 
         <p>
           Change:{' '}
           <span style={{ color }}>
             {priceChangeText} ({percentText})
           </span>
         </p>
-      )}
+      }
 
       <small>Previous Close: ${previousClose?.toFixed(2) ?? 'N/A'}</small>
     </div>
