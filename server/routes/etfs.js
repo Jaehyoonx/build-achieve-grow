@@ -19,9 +19,11 @@ const router = express.Router();
 router.get('/etfs', async (req, res) => {
   try {
     await db.setCollection('etfs');
+    // Parse limit from query (defaults to 0 = no limit)
+    const limit = parseInt(req.query.limit) || 0;
 
-    // Fetch all ETF documents from MongoDB and convert to array
-    const etfs = await db.collection.find({}).toArray();
+    // Fetch all ETF documents with optional limit
+    const etfs = await db.collection.find({}).limit(limit).toArray();
 
     res.status(200).json(etfs);
   } catch (error) {
