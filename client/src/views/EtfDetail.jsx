@@ -5,7 +5,6 @@ import EtfCard from '../components/EtfCard';
 import EtfChart from '../components/EtfChart';
 
 export default function EtfDetail({ symbol, onBack }) {
-
   const [history, setHistory] = useState([]);
   const [latest, setLatest] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,11 +42,11 @@ export default function EtfDetail({ symbol, onBack }) {
   let previousPrice;
 
   if (history.length > 1) {
-    // IF we have at least 2 days of data, use yesterday’s close
-    previousPrice = history[1].price;
+    // If we have at least 2 days of data, use yesterday’s close
+    previousPrice = history[1].Close;
   } else {
-    // In case only one data point available → fall back to latest price
-    previousPrice = latest.price;
+    // In case only one data point is available → fall back to latest price
+    previousPrice = latest.Close;
   }
 
   return (
@@ -56,16 +55,16 @@ export default function EtfDetail({ symbol, onBack }) {
 
       <h1>{symbol}</h1>
 
-      {latest && 
+      {latest && (
         <EtfCard
-          symbol={latest.symbol}
-          currentPrice={latest.price}
+          symbol={latest.Symbol}
+          currentPrice={latest.Close}
           previousClose={previousPrice}
         />
-      }
+      )}
 
       <div>
-        <EtfChart data={history} />
+        <EtfChart data={history.map(h => ({ date: h.Date, price: h.Close }))} />
       </div>
     </div>
   );
