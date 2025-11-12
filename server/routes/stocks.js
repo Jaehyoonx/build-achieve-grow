@@ -40,14 +40,6 @@ function transformStock(doc) {
  *       500:
  *         description: Failed to fetch stocks
  */
-
-/*
-  GET /api/stocks
-  Returns all stock data
-  This is the only fully implemented endpoint so far.
-  For now, we’re just doing a simple find({}) with no filters, 
-  but in later phases we can add query parameters for pagination or symbol filtering.
-*/
 router.get('/stocks', async  (req, res) =>{
   try {
     await db.setCollection('stocks');
