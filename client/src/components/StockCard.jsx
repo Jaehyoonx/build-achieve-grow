@@ -3,7 +3,7 @@
 // Displays ticker, current price, and up/down color indicator.
 import { useState, useEffect } from 'react';
 
-export default function StockCard({ symbol, companyName, currentPrice, previousClose, onClick }) {
+export default function StockCard({ symbol, currentPrice, previousClose, onClick }) {
 
   const [priceChangeText, setPriceChangeText] = useState('');
   const [percentText, setPercentText] = useState('');
@@ -59,7 +59,6 @@ export default function StockCard({ symbol, companyName, currentPrice, previousC
   return (
     <div className="stock-card" onClick={handleSelect}>
       <h3>{symbol}</h3>
-      <p>{companyName}</p>
 
       <p>Current Price: ${currentPrice.toFixed(2)}</p>
 
