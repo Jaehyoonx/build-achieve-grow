@@ -4,7 +4,7 @@ const router = express.Router();
 
 // Helper function to transform stock document fields because MongoDB 
 // stores numbers as strings
-function transformStock(doc) {
+function transformEtf(doc) {
   return {
     Symbol: doc.fileName,
     Date: doc.Date,
@@ -80,7 +80,7 @@ router.get('/etfs', async (req, res) => {
     // Fetch all ETF documents with optional limit
     const etfs = await db.collection.find({}).limit(limit).toArray();
 
-    res.status(200).json(etfs.map(transformStock));
+    res.status(200).json(etfs.map(transformEtf));
   } catch (error) {
     console.error('Error fetching ETFs:', error);
     // Throw 500 for internal server issues
@@ -124,7 +124,7 @@ router.get('/etfs/:symbol', async (req, res) => {
       return res.status(404).json({ error: 'ETF symbol not found' });
     }
 
-    res.json(etfDataForSymbol.map(transformStock));
+    res.json(etfDataForSymbol.map(transformEtf));
   } catch (error) {
     console.error('Error fetching ETF:', error);
     res.status(500).json({ error: 'Failed to fetch ETF data' });
@@ -166,7 +166,7 @@ router.get('/etfs/:symbol/latest', async (req, res) => {
       return res.status(404).json({ error: 'ETF symbol not found' });
     }
 
-    res.json(transformStock(latest[0]));
+    res.json(transformEtf(latest[0]));
   } catch (error) {
     console.error('Error fetching latest ETF:', error);
     res.status(500).json({ error: 'Failed to fetch latest ETF data' });
@@ -217,7 +217,7 @@ router.get('/etfs/search', async (req, res) => {
       Date: { $gte: start, $lte: end }
     }).toArray();
 
-    res.json(searchedData.map(transformStock));
+    res.json(searchedData.map(transformEtf));
   } catch (error) {
     console.error('Error fetching ETF data in date range:', error);
     res.status(500).json({ error: 'Failed to fetch ETF data in date range' });
