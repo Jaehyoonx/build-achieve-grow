@@ -2,6 +2,20 @@ import express from 'express';
 import { db } from '../db/db.js';
 const router = express.Router();
 
+// Helper function to transform stock document fields because MongoDB 
+// stores numbers as strings
+function transformStock(doc) {
+  return {
+    Symbol: doc.fileName,
+    Date: doc.Date,
+    Open: Number(doc.Open),
+    High: Number(doc.High),
+    Low: Number(doc.Low),
+    Close: Number(doc.Close),
+    AdjClose: Number(doc['Adj Close']),
+    Volume: Number(doc.Volume),
+  };
+}
 //-------------ETFs Section-------------
 
 /**
@@ -66,7 +80,7 @@ router.get('/etfs', async (req, res) => {
     // Fetch all ETF documents with optional limit
     const etfs = await db.collection.find({}).limit(limit).toArray();
 
-    res.status(200).json(etfs);
+    res.status(200).json(etfs.map(transformStock));
   } catch (error) {
     console.error('Error fetching ETFs:', error);
     // Throw 500 for internal server issues
@@ -110,7 +124,7 @@ router.get('/etfs/:symbol', async (req, res) => {
       return res.status(404).json({ error: 'ETF symbol not found' });
     }
 
-    res.json(etfDataForSymbol);
+    res.json(etfDataForSymbol.map(transformStock));
   } catch (error) {
     console.error('Error fetching ETF:', error);
     res.status(500).json({ error: 'Failed to fetch ETF data' });
@@ -152,7 +166,7 @@ router.get('/etfs/:symbol/latest', async (req, res) => {
       return res.status(404).json({ error: 'ETF symbol not found' });
     }
 
-    res.json(latest[0]);
+    res.json(transformStock(latest[0]));
   } catch (error) {
     console.error('Error fetching latest ETF:', error);
     res.status(500).json({ error: 'Failed to fetch latest ETF data' });
@@ -203,7 +217,7 @@ router.get('/etfs/search', async (req, res) => {
       Date: { $gte: start, $lte: end }
     }).toArray();
 
-    res.json(searchedData);
+    res.json(searchedData.map(transformStock));
   } catch (error) {
     console.error('Error fetching ETF data in date range:', error);
     res.status(500).json({ error: 'Failed to fetch ETF data in date range' });
