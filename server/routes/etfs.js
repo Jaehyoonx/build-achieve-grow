@@ -4,18 +4,59 @@ const router = express.Router();
 
 //-------------ETFs Section-------------
 
-/*
-  GET /api/etfs
-  Returns all ETF data.
-  Similar to the /api/stocks route — for now, we simply fetch every document
-  from the "etfs" collection using find({}) with no filters.
-  
-  Since our ETF dataset is small, we’re not adding pagination or limits yet.
-  Later, if the dataset grows, we can introduce:
-    - ?limit= number of ETFs to return
-    - ?source= filter by dataset source
-    - pagination (skip/limit)
-*/
+/**
+ * @swagger
+ * /api/etfs:
+ *   get:
+ *     tags:
+ *       - ETFs
+ *     summary: Get all ETF data
+ *     description: Retrieve all ETF documents from the database, with optional limit.
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           example: 10
+ *         description: Limit the number of ETF documents returned.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved all ETFs
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   symbol:
+ *                     type: string
+ *                     example: "VOO"
+ *                   Date:
+ *                     type: string
+ *                     example: "2024-01-15"
+ *                   Open:
+ *                     type: number
+ *                     example: 450.12
+ *                   Close:
+ *                     type: number
+ *                     example: 452.56
+ *                   Volume:
+ *                     type: number
+ *                     example: 1200000
+ *       500:
+ *         description: Failed to fetch ETFs
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Failed to fetch ETFs"
+ */
 router.get('/etfs', async (req, res) => {
   try {
     await db.setCollection('etfs');
@@ -33,11 +74,30 @@ router.get('/etfs', async (req, res) => {
   }
 });
 
-/*
-  GET /api/etfs/:symbol
-  Returns ETF data for a specific symbol (case-insensitive)
-  Example: /api/etfs/VOO
-*/
+/**
+ * @swagger
+ * /api/etfs/{symbol}:
+ *   get:
+ *     tags:
+ *       - ETFs
+ *     summary: Get ETF data by symbol
+ *     description: Retrieve all ETF records for a specific symbol.
+ *     parameters:
+ *       - in: path
+ *         name: symbol
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: VOO
+ *         description: The ETF symbol to search for.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved ETF data for symbol
+ *       404:
+ *         description: ETF symbol not found
+ *       500:
+ *         description: Failed to fetch ETF
+ */
 router.get('/etfs/:symbol', async (req, res) => {
   try {
     await db.setCollection('etfs');
@@ -57,22 +117,34 @@ router.get('/etfs/:symbol', async (req, res) => {
   }
 });
 
-/*
-  GET /api/etfs/:symbol/latest
-  Returns the latest ETF data for a specific symbol (case-insensitive)
-  Example: /api/etfs/VOO/latest
-*/
+/**
+ * @swagger
+ * /api/etfs/{symbol}/latest:
+ *   get:
+ *     tags:
+ *       - ETFs
+ *     summary: Get the latest ETF data for a symbol
+ *     description: Retrieve the most recent ETF entry (by Date) for a given symbol.
+ *     parameters:
+ *       - in: path
+ *         name: symbol
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: VOO
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved the latest ETF data
+ *       404:
+ *         description: ETF symbol not found
+ *       500:
+ *         description: Failed to fetch latest ETF data
+ */
 router.get('/etfs/:symbol/latest', async (req, res) => {
   try {
     await db.setCollection('etfs');
     const symbol = req.params.symbol.toUpperCase();
 
-    /*
-      Find the latest entry by sorting by Date descending and limiting to 1.
-      -1 indicates descending order.
-      Source:
-      https://stackoverflow.com/questions/13847766/how-to-sort-a-collection-by-date-in-mongodb
-    */
     const latest = await db.collection.find({ symbol }).sort({ Date: -1 }).limit(1).toArray();
 
     if (latest.length === 0) {
@@ -87,11 +159,35 @@ router.get('/etfs/:symbol/latest', async (req, res) => {
   }
 });
 
-/*
-  GET /api/etfs/search?start=YYYY-MM-DD&end=YYYY-MM-DD
-  Returns ETF data within a specific date range
-  Example: /api/etfs/search?start=2023-01-01&end=2023-01-31
-*/
+/**
+ * @swagger
+ * /api/etfs/search:
+ *   get:
+ *     tags:
+ *       - ETFs
+ *     summary: Search ETFs by date range
+ *     description: Retrieve ETF data between specific start and end dates.
+ *     parameters:
+ *       - in: query
+ *         name: start
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: "2023-01-01"
+ *       - in: query
+ *         name: end
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: "2023-01-31"
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved ETF data within the date range
+ *       400:
+ *         description: Missing start or end query parameters
+ *       500:
+ *         description: Failed to fetch ETF data in date range
+ */
 router.get('/etfs/search', async (req, res) => {
   try {
     await db.setCollection('etfs');
@@ -103,16 +199,6 @@ router.get('/etfs/search', async (req, res) => {
       return res.status(400).json({ error: 'start and end query parameters are required' });
     }
 
-    /*
-      TODO: Validate date format (YYYY-MM-DD)
-      and ensure start <= end before querying.
-    */
-
-    /*
-      Find all ETF entries where Date is between start and end (inclusive)
-      Using $gte (greater than or equal) and $lte (less than or equal) operators.
-      Source: https://stackoverflow.com/questions/2943222/find-objects-between-two-dates-mongodb
-    */
     const searchedData = await db.collection.find({
       Date: { $gte: start, $lte: end }
     }).toArray();
