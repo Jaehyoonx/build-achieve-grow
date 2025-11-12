@@ -138,6 +138,7 @@ router.get('/headlines/:source', async (req, res) => {
     const limit = parseInt(req.query.limit) || 20;
     const headlines = await db.collection.find({ fileName: source }).limit(limit).toArray();
     res.json(headlines);
+    
   } catch (error) {
     console.error('cant fetch', error);
     res.status(500).json({ error: 'Failed to fetch headline' });
