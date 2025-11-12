@@ -1,4 +1,5 @@
 import express from 'express';
+
 import headlineRoute from './routes/headlines.js';
 import etfsRoute from './routes/etfs.js';
 import stockRoute from './routes/stocks.js';

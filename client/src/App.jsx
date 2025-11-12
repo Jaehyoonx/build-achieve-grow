@@ -1,11 +1,11 @@
 import './App.css';
-import HeadlineList from './components/HeadlineList';
-
+import NewsPage from './views/NewsPage';
 function App() {
   return (
     <div>
-      <h1>B.A.G. Clietn</h1>
-      <HeadlineList />
+      <h1>B.A.G. Client</h1>
+      
+      <NewsPage />
     </div>
   );
 }

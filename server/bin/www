@@ -3,16 +3,52 @@
 import app, { port } from '../api.js';
 import { db } from '../db/db.js';
 
-await db.connect('bagdb');
+let server;
 
-const server = app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
-});
+/*
+  Start the server after establishing a DB connection.
+  Implement Phase 1 feedback from Maja: Add error handling to www to close
+  the db if start-up fails.
+*/
+try {
+  await db.connect('bagdb');
 
-// graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
-  server.close(() => {
-    console.log('HTTP server closed');
+  server = app.listen(port, () => {
+    console.log(`Server listening on http://localhost:${port}`);
   });
-});
+
+  // handle server-level errors during startup
+  server.on('error', async (err) => {
+    console.error('Server failed to start:', err);
+    await db.close();
+    process.exit(1);
+  });
+
+} catch (err) {
+  console.error('Startup failure:', err);
+  await db.close();
+  process.exit(1);
+}
+
+/*
+  Helper method for graceful shutdown handling. Close server and DB connection
+  on termination signals. Ctrl+C in terminal sends SIGINT, while SIGTERM is
+  sent by hosting platforms like Linux, Docker, and production.
+*/
+async function gracefulShutdown(signal) {
+  console.log(`${signal} signal received: closing HTTP server`);
+  if (server) {
+    server.close(async () => {
+      console.log('HTTP server closed');
+      await db.close();
+      console.log('Database connection closed');
+      process.exit(0);
+    });
+  } else {
+    await db.close();
+    process.exit(0);
+  }
+}
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
