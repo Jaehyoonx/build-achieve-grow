@@ -45,28 +45,26 @@ export default function StockDetail({ symbol, onBack }) {
 
   if (history.length > 1) {
     // IF we have at least 2 days of data, use yesterday’s close
-    previousPrice = history[1].price;
+    previousPrice = history[1].Close;
   } else {
     // In case only one data point available → fall back to latest price
-    previousPrice = latest.price;
+    previousPrice = latest.Close;
   }
 
   return (
     <div>
       <button onClick={onBack}>← Back</button>
 
-      <h1>{symbol}</h1>
-
       {latest && 
         <StockCard
-          symbol={latest.symbol}
-          currentPrice={latest.price}
+          symbol={latest.Symbol}
+          currentPrice={latest.Close}
           previousClose={previousPrice}
         />
       }
 
       <div>
-        <StockChart data={history} />
+        <StockChart data={history.map(h => ({ date: h.Date, price: h.Close }))} />
       </div>
     </div>
   );
