@@ -4,6 +4,31 @@ import sinon from 'sinon';
 import app from '../api.js';
 import { db } from '../db/db.js';
 
+// Mock data to simulate MongoDB docs
+const sampleStocks = [
+  {
+    _id: 1,
+    fileName: 'AAPL',
+    Date: '2025-11-09',
+    Open: '180.12',
+    High: '182.55',
+    Low: '177.34',
+    Close: '181.22',
+    'Adj Close': '181.10',
+    Volume: '50000000'
+  },
+  {
+    _id: 2,
+    fileName: 'GOOG',
+    Date: '2025-11-09',
+    Open: '140.00',
+    High: '142.00',
+    Low: '139.00',
+    Close: '141.00',
+    'Adj Close': '140.90',
+    Volume: '20000000'
+  }
+];
 
 // Test the /api/stocks endpoint
 describe('GET /api/stocks', () => {
@@ -16,10 +41,7 @@ describe('GET /api/stocks', () => {
     db.collection = {
       find: sinon.stub().returns({
         limit: () => ({
-          toArray: () => Promise.resolve([
-            { _id: 1, symbol: 'AAPL', price: 180 },
-            { _id: 2, symbol: 'GOOG', price: 140 }
-          ])
+          toArray: () => Promise.resolve(sampleStocks)
         })
       })
     };
@@ -33,18 +55,11 @@ describe('GET /api/stocks', () => {
     const res = await request(app).get('/api/stocks?limit=5');
     expect(res.status).to.equal(200);
     expect(res.body).to.be.an('array');
-    expect(res.body).to.deep.equal([
-      { _id: 1, symbol: 'AAPL', price: 180 },
-      { _id: 2, symbol: 'GOOG', price: 140 }
-    ]);
-  });
-
-  it('should contain objects with _id field', async () => {
-    const res = await request(app).get('/api/stocks?limit=5');
-    expect(res.status).to.equal(200);
-    if (res.body.length > 0) {
-      expect(res.body[0]).to.have.property('_id');
-    }
+    expect(res.body[0]).to.include.keys(
+      'Symbol', 'Date', 'Open', 'High', 'Low', 'Close', 'AdjClose', 'Volume'
+    );
+    expect(res.body[0].Symbol).to.equal('AAPL');
+    expect(res.body[0].Close).to.be.a('number');
   });
 });
 
@@ -58,10 +73,7 @@ describe('GET /api/stocks/:symbol', () => {
     db.collection = {
       find: sinon.stub().returns({
         toArray: () => 
-          Promise.resolve([
-            { _id: 1, symbol: 'AAPL', price: 180 },
-            { _id: 2, symbol: 'GOOG', price: 140 }
-          ])
+          Promise.resolve(sampleStocks)
       })
     };
   });
@@ -72,7 +84,8 @@ describe('GET /api/stocks/:symbol', () => {
     const res = await request(app).get('/api/stocks/AAPL');
     expect(res.status).to.equal(200);
     expect(res.body).to.be.an('array');
-    expect(res.body[0].symbol).to.equal('AAPL');
+    expect(res.body[0].Symbol).to.equal('AAPL');
+    expect(res.body[0].Close).to.be.a('number');
   });
 });
 
@@ -86,8 +99,7 @@ describe('GET /api/stocks/:symbol/latest', () => {
       find: sinon.stub().returns({
         sort: () => ({
           limit: () => ({
-            toArray: () =>
-              Promise.resolve([{ _id: 99, symbol: 'AAPL', price: 200, date: '2025-11-09' }])
+            toArray: () => Promise.resolve([sampleStocks[0]])
           })
         })
       })
@@ -99,8 +111,8 @@ describe('GET /api/stocks/:symbol/latest', () => {
   it('should return the latest stock entry', async () => {
     const res = await request(app).get('/api/stocks/AAPL/latest');
     expect(res.status).to.equal(200);
-    expect(res.body.symbol).to.equal('AAPL');
-    expect(res.body.price).to.equal(200);
+    expect(res.body.Symbol).to.equal('AAPL');
+    expect(res.body.Close).to.equal(181.22);
   });
 });
 
@@ -112,9 +124,7 @@ describe('GET /api/stocks/search?start=&end=', () => {
     db.collection = {
       find: sinon.stub().returns({
         toArray: () =>
-          Promise.resolve([
-            { _id: 1, symbol: 'AAPL', date: '2023-01-05', price: 150 }
-          ])
+          Promise.resolve(sampleStocks)
       })
     };
   });
@@ -124,7 +134,7 @@ describe('GET /api/stocks/search?start=&end=', () => {
   it('should return stock data within a date range', async () => {
     const res = await request(app).get('/api/stocks/search?start=2023-01-01&end=2023-01-31');
     expect(res.status).to.equal(200);
-    expect(res.body).to.be.an('array');
-    expect(res.body[0].date).to.equal('2023-01-05');
+    expect(res.body[0]).to.include.keys('Symbol', 'Date', 'Close');
+    expect(res.body[0].Date).to.equal('2025-11-09');
   });
 });
