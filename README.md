@@ -18,8 +18,35 @@ All core data is processed on the **Express server** and stored in **MongoDB**, 
 
 ---
 
-## Phase 1
-At this stage, the app is a basic full-stack prototype: the server provides two working API endpoints connected to MongoDB, and the client displays a simple component that fetches and shows a small piece of data. This confirms that the client, server, and database are successfully integrated.
+## Phase 2 Summary
+Phase 2 focuses on implementing the client-side features and improving the server-side API with documentation and testing.
+
+### Implemented Deliverables
+**Client-Side**
+- React Components:
+  - EtfCard, EtfGrid, EtfDetail, EtfChart
+  - StockCard, StockGrid, StockDetail, StockChart
+  - HeadlineList, NewsFeed, CompareChart, SearchBar, Footer
+- Interactive visualizations using Recharts.
+- Routing & Interaction: Clickable cards to access detailed chart views.
+- Error & Loading States: Friendly UI messages and fail-gracefully design.
+- Accessibility and semantic layout.
+
+**Server-Side**
+- Express Endpoints:
+  - /api/stocks, /api/stocks/:symbol, /api/stocks/:symbol/latest
+  - /api/etfs, /api/etfs/:source
+  - /api/headlines
+- Swagger Documentation: Accessible at /api-docs with OpenAPI annotations.
+- Unit Tests: Mocha/Chai/Supertest suites for etfs.js and stocks.js.
+- CI/CD Integration: GitLab CI pipeline runs linting, build, and tests.
+- Bundle Size Monitoring: bundlesize2 tracks JS/CSS build weights.
+
+**New Additions**
+- Added NewsFeed and HeadlineList components for displaying financial headlines.
+- Integrated Swagger documentation for API.
+- Organized code into /components and /views for maintainability.
+- Added CompareStocks and CompareEtfs pages.
 
 ### Goals
 - Perform full stack project setup (server + client stubs, tests, DB hook-up).  
@@ -29,20 +56,59 @@ At this stage, the app is a basic full-stack prototype: the server provides two 
 ## Project Structure
 ```bash
 project-root/
-├── client/            # React front-end (Vite)
-│   ├── public/        # Static assets (favicon, etc.)
-│   └── src/           # React components
+├── client/
+│   ├── public/
+│   └── src/
+│       ├── assets/
+│       ├── components/
+│       │   ├── CompareChart.jsx
+│       │   ├── EtfCard.jsx
+│       │   ├── EtfChart.jsx
+│       │   ├── EtfGrid.jsx
+│       │   ├── Footer.jsx
+│       │   ├── Footer.css
+│       │   ├── HeadlineList.jsx
+│       │   ├── NewsFeed.jsx
+│       │   ├── SearchBar.jsx
+│       │   ├── StockCard.jsx
+│       │   ├── StockChart.jsx
+│       │   └── StockGrid.jsx
+│       │
+│       ├── views/
+│       │   ├── CompareEtfs.jsx
+│       │   ├── CompareStocks.jsx
+│       │   ├── EtfDetail.jsx
+│       │   ├── Home.jsx
+│       │   ├── NewsPage.jsx
+│       │   └── StockDetail.jsx
+│       │
+│       ├── App.jsx
+│       ├── App.css
+│       ├── index.css
+│       └── main.jsx
 │
-├── server/            # Express + MongoDB back-end
-│   ├── bin/           # Entry point (www)
-│   ├── db/            # Database connection
-│   ├── routes/        # Express routes
-│   ├── utils/         # Utility scripts (e.g. seed.js)
-│   └── test/          # Mocha/Chai/Supertest tests
+├── server/
+│   ├── routes/
+│   ├── db/
+│   ├── utils/
+│   ├── test/
+│   ├── swagger.js
+│   └── bin/www
 │
-├── package.json       # Root scripts (start/build)
-└── .gitlab-ci.yml     # CI pipeline config
+├── package.json
+└── .gitlab-ci.yml
 ```
+
+## Data Sources and Attributions
+This project uses public datasets from Kaggle for educational purposes only:
+
+- Stock Market Dataset by jacksoncrow: https://www.kaggle.com/datasets/jacksoncrow/stock-market-dataset
+- Financial News Headlines Dataset by ankurzing: https://www.kaggle.com/datasets/ankurzing/sentiment-analysis-for-financial-news
+
+**Libraries and Tools:** React, Express, MongoDB, Recharts, Mocha/Chai/Supertest, Swagger UI, bundlesize2
+
+## API Documentation
+All routes are documented using Swagger.
 
 ## Running the Client (Development)
 ```bash
@@ -78,3 +144,7 @@ npm install
 # Start the server (serves both API + built client)
 npm start
 ```
+
+## Acknowledgements
+This project was developed for Dawson College, Computer Science Technology (420-520-DW) by Haider, Ryan, Christian
+under the supervision of Maja Frydrychowicz.
