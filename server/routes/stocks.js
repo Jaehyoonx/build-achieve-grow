@@ -1,22 +1,7 @@
 import express from 'express';
 import { db } from '../db/db.js';
 const router = express.Router();
-
-// Helper function to transform stock document fields because MongoDB 
-// stores numbers as strings
-function transformStock(doc) {
-  return {
-    Symbol: doc.fileName,
-    Date: doc.Date,
-    Open: Number(doc.Open),
-    High: Number(doc.High),
-    Low: Number(doc.Low),
-    Close: Number(doc.Close),
-    AdjClose: Number(doc['Adj Close']),
-    Volume: Number(doc.Volume),
-  };
-}
-
+import { transformPriceData } from '../utils/transformPriceData.js';
 //----------Stock Endpoints-----------------------
 
 /**
@@ -46,7 +31,7 @@ router.get('/stocks', async  (req, res) =>{
     const limit = parseInt(req.query.limit) || 0;
     const stocks = await db.collection.find({}).limit(limit).toArray();
 
-    res.json(stocks.map(transformStock));
+    res.json(stocks.map(transformPriceData));
   } catch (error) {
     console.error('Error fetching stocks:', error);
     res.status(500).json({ error: 'Failed to fetch stocks' });
@@ -87,7 +72,7 @@ router.get('/stocks/:symbol', async (req, res) => {
       return res.status(404).json({ error: 'Symbol not found' });
     }
 
-    res.json(stockDataForSymbol.map(transformStock));
+    res.json(stockDataForSymbol.map(transformPriceData));
   } catch (error) {
     console.error('Error fetching stock:', error);
     res.status(500).json({ error: 'Failed to fetch stock data' });
@@ -135,7 +120,7 @@ router.get('/stocks/:symbol/latest', async (req, res) => {
       return res.status(404).json({ error: 'Symbol not found' });
     }
 
-    res.json(transformStock(latest[0]));
+    res.json(transformPriceData(latest[0]));
   } catch (error) {
     console.error('Error fetching latest:', error);
     res.status(500).json({ error: 'Failed to fetch latest stock data' });
@@ -185,7 +170,7 @@ router.get('/stocks/search', async (req, res) => {
       date: { $gte: start, $lte: end }
     }).toArray();
 
-    res.json(searchedData.map(transformStock));
+    res.json(searchedData.map(transformPriceData));
   } catch (error) {
     console.error('Error fetching stock data in date range:', error);
     res.status(500).json({ error: 'Failed to fetch stock data in date range' });
