@@ -1,71 +1,8 @@
 // View: EtfDetail
-// Purpose: Shows detailed ETF information, chart, and related news.
-import { useEffect, useState } from 'react';
-import EtfCard from '../components/EtfCard';
-import EtfChart from '../components/EtfChart';
+// Purpose: Shows detailed ETF information, chart, filters, and related news.
 
-export default function EtfDetail({ symbol, onBack }) {
-  const [history, setHistory] = useState([]);
-  const [latest, setLatest] = useState(null);
-  const [loading, setLoading] = useState(true);
+import PriceDetail from "./shared/PriceDetail";
 
-  useEffect(() => {
-    async function fetchData() {
-      setLoading(true);
-
-      /*
-        We make two requests because:
-        1) /api/etfs/:symbol returns the *full historical dataset*.
-           This is needed to draw the EtfChart.
-        2) /api/etfs/:symbol/latest returns only the *most recent* entry.
-           This is used to show the current price in EtfCard.
-        
-        Fetching latest separately avoids needing to manually sort/filter the history
-        and ensures the UI always shows correct and up-to-date price info.
-      */
-      const histRes = await fetch(`/api/etfs/${symbol}`);
-      const histData = await histRes.json();
-
-      const latestRes = await fetch(`/api/etfs/${symbol}/latest`);
-      const latestData = await latestRes.json();
-
-      setHistory(histData);
-      setLatest(latestData);
-      setLoading(false);
-    }
-
-    fetchData();
-  }, [symbol]);
-
-  if (loading) return <p>Loading ETF data...</p>;
-
-  let previousPrice;
-
-  if (history.length > 1) {
-    // If we have at least 2 days of data, use yesterday’s close
-    previousPrice = history[1].Close;
-  } else {
-    // In case only one data point is available → fall back to latest price
-    previousPrice = latest.Close;
-  }
-
-  return (
-    <div>
-      <button onClick={onBack}>← Back</button>
-
-      <h1>{symbol}</h1>
-
-      {latest && (
-        <EtfCard
-          symbol={latest.Symbol}
-          currentPrice={latest.Close}
-          previousClose={previousPrice}
-        />
-      )}
-
-      <div>
-        <EtfChart data={history.map(h => ({ date: h.Date, price: h.Close }))} />
-      </div>
-    </div>
-  );
+export default function EtfDetail(props) {
+  return <PriceDetail type="etfs" {...props} />;
 }
