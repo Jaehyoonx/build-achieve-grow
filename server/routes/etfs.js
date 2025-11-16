@@ -146,7 +146,9 @@ router.get('/etfs/:symbol/latest', async (req, res) => {
     await db.setCollection('etfs');
     const symbol = req.params.symbol.toUpperCase();
 
-    const latest = await db.collection.find({ fileName: symbol }).sort({ Date: -1 }).limit(1).toArray();
+    const latestQuery = db.collection.find({ fileName: symbol }).sort({ Date: -1 }).limit(1);
+    const latest = await latestQuery.toArray();
+
 
     if (latest.length === 0) {
       // Throw 404 if no data found for the symbol

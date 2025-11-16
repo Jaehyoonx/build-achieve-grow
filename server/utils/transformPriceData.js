@@ -9,7 +9,7 @@ export function transformPriceData(doc) {
     High: Number(doc.High),
     Low: Number(doc.Low),
     Close: Number(doc.Close),
-    AdjClose: Number(doc["Adj Close"]),
+    AdjClose: Number(doc['Adj Close']),
     Volume: Number(doc.Volume),
   };
 }

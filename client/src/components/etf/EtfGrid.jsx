@@ -11,7 +11,7 @@ export default function EtfGrid() {
     <PriceGrid
       fetchUrl="/api/etfs?limit=50"
 
-      renderCard={(etf, onClick) => (
+      renderCard={(etf, onClick) => 
         <EtfCard
           key={etf.Symbol}
           symbol={etf.Symbol}
@@ -19,11 +19,11 @@ export default function EtfGrid() {
           previousClose={etf.AdjClose}
           onClick={onClick}
         />
-      )}
+      }
 
-      renderDetail={(symbol, onBack) => (
+      renderDetail={(symbol, onBack) => 
         <EtfDetail symbol={symbol} onBack={onBack} />
-      )}
+      }
     />
   );
 }

@@ -9,9 +9,9 @@ import PriceGrid from '../shared/PriceGrid';
 export default function StockGrid() {
   return (
     <PriceGrid
-      fetchUrl="/api/stocks?limit=1"
+      fetchUrl="/api/stocks?limit=50"
 
-      renderCard={(stock, onClick) => (
+      renderCard={(stock, onClick) => 
         <StockCard
           key={stock.Symbol}
           symbol={stock.Symbol}
@@ -19,11 +19,11 @@ export default function StockGrid() {
           previousClose={stock.AdjClose}
           onClick={onClick}
         />
-      )}
+      }
 
-      renderDetail={(symbol, onBack) => (
+      renderDetail={(symbol, onBack) => 
         <StockDetail symbol={symbol} onBack={onBack} />
-      )}
+      }
     />
   );
 }

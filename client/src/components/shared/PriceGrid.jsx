@@ -5,9 +5,12 @@
 import { useState, useEffect } from 'react';
 
 export default function PriceGrid({
-  fetchUrl,            // e.g. "/api/stocks?limit=50"
-  renderCard,          // a function that returns <StockCard .../> or <EtfCard .../>
-  renderDetail         // a function that returns <StockDetail .../> or <EtfDetail .../>
+  // e.g. "/api/stocks?limit=50"
+  fetchUrl,
+  // a function that returns <StockCard .../> or <EtfCard .../>
+  renderCard,
+  // a function that returns <StockDetail .../> or <EtfDetail .../>
+  renderDetail
 }) {
 
   const [selectedSymbol, setSelectedSymbol] = useState(null);
