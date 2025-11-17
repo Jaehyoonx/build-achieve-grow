@@ -15,7 +15,7 @@ export default function StockGrid() {
         <StockCard
           key={stock.Symbol}
           symbol={stock.Symbol}
-          currentPrice={stock.Close}
+          latestPrice={stock.Close}
           previousClose={stock.AdjClose}
           onClick={onClick}
         />

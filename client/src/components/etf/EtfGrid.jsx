@@ -15,7 +15,7 @@ export default function EtfGrid() {
         <EtfCard
           key={etf.Symbol}
           symbol={etf.Symbol}
-          currentPrice={etf.Close}
+          latestPrice={etf.Close}
           previousClose={etf.AdjClose}
           onClick={onClick}
         />

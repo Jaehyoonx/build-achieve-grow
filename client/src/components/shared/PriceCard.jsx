@@ -4,14 +4,14 @@
 // This is exactly the same logic and comments you used in StockCard.
 import { useState, useEffect } from 'react';
 
-export default function PriceCard({ symbol, currentPrice, previousClose, onClick }) {
+export default function PriceCard({ symbol, latestPrice, previousClose, onClick }) {
 
   const [priceChangeText, setPriceChangeText] = useState('');
   const [percentText, setPercentText] = useState('');
   const [color, setColor] = useState('black');
 
   useEffect(() => {
-    const change = currentPrice - previousClose;
+    const change = latestPrice - previousClose;
     const percent = change / previousClose * 100;
 
     // Format the price change and color for display
@@ -49,7 +49,7 @@ export default function PriceCard({ symbol, currentPrice, previousClose, onClick
 
     setPriceChangeText(changeText);
     setPercentText(percentFormatted);
-  }, [currentPrice, previousClose]);
+  }, [latestPrice, previousClose]);
 
   function handleSelect() {
     if (onClick) {
@@ -61,7 +61,7 @@ export default function PriceCard({ symbol, currentPrice, previousClose, onClick
     <div className="price-card" onClick={handleSelect}>
       <h3>{symbol}</h3>
 
-      <p>Current Price: ${currentPrice.toFixed(2)}</p>
+      <p>Latest Price: ${latestPrice.toFixed(2)}</p>
 
       <p>
         Change: <span style={{ color: color }}>{priceChangeText} ({percentText})</span>
