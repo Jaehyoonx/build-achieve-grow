@@ -66,4 +66,14 @@ export default [
       'semi-spacing': 'error'
     }
   },
+  // Mocha test files configuration
+  // Source: https://eslint.org/docs/latest/use/configure/language-options#using-configuration-files-1
+  {
+    files: ['**/test/**/*.js', '**/*.test.js'],
+    languageOptions: {
+      globals: {
+        ...globals.mocha
+      }
+    }
+  }
 ];
