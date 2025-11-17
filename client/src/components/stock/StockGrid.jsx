@@ -9,7 +9,7 @@ import PriceGrid from '../shared/PriceGrid';
 export default function StockGrid() {
   return (
     <PriceGrid
-      fetchUrl="/api/stocks?limit=50"
+      fetchUrl="/api/stocks?latest=true&limit=50"
 
       renderCard={(stock, onClick) => 
         <StockCard
