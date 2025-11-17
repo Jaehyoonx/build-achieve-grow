@@ -1,0 +1,253 @@
+/* PriceChart Component Styles */
+/* Purpose: Contains all styling for the price history chart component */
+/* Including responsive design for mobile, tablet, and desktop */
+
+/* Main container for the entire chart */
+.price-chart-container {
+  width: 100%;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  margin: 20px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+/* Chart title/heading */
+.price-chart-title {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+/* Chart description text */
+.price-chart-description {
+  text-align: center;
+  color: #666;
+  font-size: 0.95rem;
+  margin: 5px 0 20px 0;
+}
+
+/* Date range selector container */
+.date-range-selector {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #e8e8e8;
+  justify-content: center;
+}
+
+/* Individual date input group */
+.date-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Labels for date inputs */
+.date-label {
+  font-weight: bold;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* Input fields for start and end date */
+.date-input {
+  padding: 10px 12px;
+  border-radius: 4px;
+  border: 2px solid #ddd;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-width: 150px;
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: #8884d8;
+  box-shadow: 0 0 5px rgba(136, 132, 216, 0.3);
+}
+
+.date-input:hover {
+  border-color: #999;
+}
+
+/* Reset button styling */
+.reset-button {
+  padding: 10px 18px;
+  border-radius: 4px;
+  border: none;
+  background-color: #7c7ccc;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s, transform 0.1s;
+  font-size: 14px;
+  height: fit-content;
+}
+
+.reset-button:hover {
+  background-color: #6b6bbb;
+  transform: scale(1.02);
+}
+
+.reset-button:active {
+  background-color: #5a5aaa;
+  transform: scale(0.98);
+}
+
+/* Chart info container */
+.chart-info {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* Data counter text */
+.data-counter {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Chart wrapper for responsive sizing */
+.chart-wrapper {
+  width: 100%;
+}
+
+/* Tooltip styling for hover values */
+.chart-tooltip {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Custom tooltip styling */
+.custom-tooltip {
+  background-color: #ffffff;
+  border: 2px solid #8884d8;
+  border-radius: 6px;
+  padding: 10px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.custom-tooltip p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+}
+
+.tooltip-date {
+  color: #8884d8;
+  margin-bottom: 4px;
+}
+
+.tooltip-price {
+  color: #27ae60;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Responsive styles for mobile devices (< 640px) */
+@media (max-width: 639px) {
+  .price-chart-container {
+    padding: 15px;
+    margin: 15px auto;
+    max-width: 100%;
+  }
+
+  .price-chart-title {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .price-chart-description {
+    font-size: 0.85rem;
+    margin: 5px 0 15px 0;
+  }
+
+  .date-range-selector {
+    gap: 10px;
+    padding: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+  }
+
+  .date-input-group {
+    width: 100%;
+  }
+
+  .date-label {
+    font-size: 0.85rem;
+    text-align: left;
+  }
+
+  .date-input {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 13px;
+    box-sizing: border-box;
+    min-width: unset;
+  }
+
+  .reset-button {
+    width: 100%;
+    padding: 10px 16px;
+    box-sizing: border-box;
+  }
+
+  .chart-info {
+    margin-bottom: 12px;
+  }
+
+  .data-counter {
+    font-size: 12px;
+  }
+}
+
+/* Responsive styles for tablet devices (640px - 1023px) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .price-chart-container {
+    padding: 18px;
+  }
+
+  .price-chart-title {
+    font-size: 1.3rem;
+  }
+
+  .date-range-selector {
+    gap: 12px;
+  }
+
+  .data-counter {
+    font-size: 13px;
+  }
+}
+
+/* Responsive styles for desktop devices (>= 1024px) */
+@media (min-width: 1024px) {
+  .price-chart-container {
+    padding: 20px;
+  }
+
+  .price-chart-title {
+    font-size: 1.5rem;
+  }
+
+  .date-range-selector {
+    gap: 15px;
+  }
+
+  .data-counter {
+    font-size: 13px;
+  }
+}
