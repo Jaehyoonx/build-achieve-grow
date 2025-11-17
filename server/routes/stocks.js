@@ -10,8 +10,11 @@ import { transformPriceData } from '../utils/transformPriceData.js';
  *   get:
  *     tags:
  *       - Stocks
- *     summary: Get all stock data
- *     description: Retrieve all stock documents from the database, with optional limit.
+ *     summary: Get all stock data or the latest entry for each symbol
+ *     description: >
+ *       Retrieve all stock documents from the database.
+ *       Use `?latest=true` to get only the most recent entry for each symbol.
+ *       Use `?limit=` to limit the number of documents returned.
  *     parameters:
  *       - in: query
  *         name: limit
@@ -19,19 +22,52 @@ import { transformPriceData } from '../utils/transformPriceData.js';
  *           type: integer
  *           example: 10
  *         description: Limit the number of stock documents returned.
+ *       - in: query
+ *         name: latest
+ *         schema:
+ *           type: boolean
+ *           example: true
+ *         description: If true, return only the latest record for each stock symbol.
  *     responses:
  *       200:
- *         description: Successfully retrieved all stocks
+ *         description: Successfully retrieved stocks
  *       500:
  *         description: Failed to fetch stocks
  */
-router.get('/stocks', async  (req, res) =>{
+router.get('/stocks', async (req, res) => {
   try {
     await db.setCollection('stocks');
     const limit = parseInt(req.query.limit) || 0;
-    const stocks = await db.collection.find({}).limit(limit).toArray();
+    const latest = req.query.latest === 'true';
 
-    res.json(stocks.map(transformPriceData));
+    if (latest) {
+      // Only the most recent record per symbol
+      const allStocks = await db.collection.find({}).sort({ Date: -1 }).limit(limit).toArray();
+
+      const latestStocksMap = new Map();
+
+      for (const stock of allStocks) {
+        const symbol = stock.fileName;
+        if (symbol && !latestStocksMap.has(symbol)) {
+          latestStocksMap.set(symbol, stock);
+        }
+      }
+
+      const latestStocks = Array.from(latestStocksMap.values()).
+      
+        /* 
+          Sort alphabetically by fileName.
+          localeCompare used for string comparison
+          Source: https://stackoverflow.com/questions/6712034/sort-array-by-firstname-
+          alphabetically-in-javascript
+        */
+        sort((a, b) => a.fileName.localeCompare(b.fileName));
+      res.json(latestStocks.map(transformPriceData));
+    } else {
+      // Regular fetch: return all or limited records
+      const stocks = await db.collection.find({}).limit(limit).toArray();
+      res.json(stocks.map(transformPriceData));
+    }
   } catch (error) {
     console.error('Error fetching stocks:', error);
     res.status(500).json({ error: 'Failed to fetch stocks' });
@@ -66,7 +102,8 @@ router.get('/stocks/:symbol', async (req, res) => {
     await db.setCollection('stocks');
     const symbol = req.params.symbol.toUpperCase();
 
-    const stockDataForSymbol = await db.collection.find({ fileName: symbol }).toArray();
+    const stockDataForSymbol = await db.collection.find({ fileName: symbol }).sort({ Date: -1 }).
+      toArray();
 
     if (stockDataForSymbol.length === 0) {
       return res.status(404).json({ error: 'Symbol not found' });
