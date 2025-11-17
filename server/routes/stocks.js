@@ -139,6 +139,12 @@ router.get('/stocks/search', async (req, res) => {
  *         schema:
  *           type: string
  *         example: AAPL
+ *       - in: query
+ *         name: sortDesc
+ *         schema:
+ *           type: boolean
+ *           example: true
+ *         description: If true, sort the stock data by date descending.
  *     responses:
  *       200:
  *         description: Successfully retrieved stock data for symbol
@@ -151,9 +157,17 @@ router.get('/stocks/:symbol', async (req, res) => {
   try {
     await db.setCollection('stocks');
     const symbol = req.params.symbol.toUpperCase();
+    const sortDesc = req.query.sortDesc === 'true';
 
-    const stockDataForSymbol = await db.collection.find({ fileName: symbol }).sort({ Date: -1 }).
-      toArray();
+    // Build query
+    let query = db.collection.find({ fileName: symbol });
+
+    // Optional sort by date descending
+    if (sortDesc && query.sort) {
+      query = query.sort({ Date: -1 });
+    }
+
+    const stockDataForSymbol = await query.toArray();
 
     if (stockDataForSymbol.length === 0) {
       return res.status(404).json({ error: 'Symbol not found' });
