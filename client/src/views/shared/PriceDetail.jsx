@@ -44,7 +44,7 @@ export default function PriceDetail({ type, symbol, onBack }) {
   let previousPrice;
 
   if (history.length > 1) {
-    previousPrice = history[1].Close;
+    previousPrice = history[history.length - 2].Close;
   } else {
     previousPrice = latest.Close;
   }

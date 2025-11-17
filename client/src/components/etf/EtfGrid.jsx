@@ -9,7 +9,7 @@ import PriceGrid from '../shared/PriceGrid';
 export default function EtfGrid() {
   return (
     <PriceGrid
-      fetchUrl="/api/etfs?limit=50"
+      fetchUrl="/api/etfs?latest=true&limit=50"
 
       renderCard={(etf, onClick) => 
         <EtfCard
