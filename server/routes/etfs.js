@@ -77,6 +77,57 @@ router.get('/etfs', async (req, res) => {
 
 /**
  * @swagger
+ * /api/etfs/search:
+ *   get:
+ *     tags:
+ *       - ETFs
+ *     summary: Search ETFs by date range
+ *     description: Retrieve ETF data between specific start and end dates.
+ *     parameters:
+ *       - in: query
+ *         name: start
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: "2023-01-01"
+ *       - in: query
+ *         name: end
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: "2023-01-31"
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved ETF data within the date range
+ *       400:
+ *         description: Missing start or end query parameters
+ *       500:
+ *         description: Failed to fetch ETF data in date range
+ */
+router.get('/etfs/search', async (req, res) => {
+  try {
+    await db.setCollection('etfs');
+
+    const { start, end } = req.query;
+
+    if (!start || !end) {
+      // Throw 400 if start or end query parameters are missing
+      return res.status(400).json({ error: 'start and end query parameters are required' });
+    }
+
+    const searchedData = await db.collection.find({
+      Date: { $gte: start, $lte: end }
+    }).toArray();
+
+    res.json(searchedData.map(transformPriceData));
+  } catch (error) {
+    console.error('Error fetching ETF data in date range:', error);
+    res.status(500).json({ error: 'Failed to fetch ETF data in date range' });
+  }
+});
+
+/**
+ * @swagger
  * /api/etfs/{symbol}:
  *   get:
  *     tags:
@@ -162,57 +213,6 @@ router.get('/etfs/:symbol/latest', async (req, res) => {
   } catch (error) {
     console.error('Error fetching latest ETF:', error);
     res.status(500).json({ error: 'Failed to fetch latest ETF data' });
-  }
-});
-
-/**
- * @swagger
- * /api/etfs/search:
- *   get:
- *     tags:
- *       - ETFs
- *     summary: Search ETFs by date range
- *     description: Retrieve ETF data between specific start and end dates.
- *     parameters:
- *       - in: query
- *         name: start
- *         required: true
- *         schema:
- *           type: string
- *           example: "2023-01-01"
- *       - in: query
- *         name: end
- *         required: true
- *         schema:
- *           type: string
- *           example: "2023-01-31"
- *     responses:
- *       200:
- *         description: Successfully retrieved ETF data within the date range
- *       400:
- *         description: Missing start or end query parameters
- *       500:
- *         description: Failed to fetch ETF data in date range
- */
-router.get('/etfs/search', async (req, res) => {
-  try {
-    await db.setCollection('etfs');
-
-    const { start, end } = req.query;
-
-    if (!start || !end) {
-      // Throw 400 if start or end query parameters are missing
-      return res.status(400).json({ error: 'start and end query parameters are required' });
-    }
-
-    const searchedData = await db.collection.find({
-      Date: { $gte: start, $lte: end }
-    }).toArray();
-
-    res.json(searchedData.map(transformPriceData));
-  } catch (error) {
-    console.error('Error fetching ETF data in date range:', error);
-    res.status(500).json({ error: 'Failed to fetch ETF data in date range' });
   }
 });
 
