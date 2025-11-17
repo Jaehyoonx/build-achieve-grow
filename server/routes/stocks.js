@@ -157,17 +157,11 @@ router.get('/stocks/:symbol', async (req, res) => {
   try {
     await db.setCollection('stocks');
     const symbol = req.params.symbol.toUpperCase();
-    const sortDesc = req.query.sortDesc === 'true';
 
-    // Build query
-    let query = db.collection.find({ fileName: symbol });
-
-    // Optional sort by date descending
-    if (sortDesc && query.sort) {
-      query = query.sort({ Date: -1 });
-    }
-
-    const stockDataForSymbol = await query.toArray();
+    // Always sort by date ascending (oldest first)
+    const stockDataForSymbol = await db.collection.find({ fileName: symbol }).sort(
+      { Date: 1 }
+    ).toArray();
 
     if (stockDataForSymbol.length === 0) {
       return res.status(404).json({ error: 'Symbol not found' });

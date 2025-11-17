@@ -11,8 +11,11 @@ const router = express.Router();
  *   get:
  *     tags:
  *       - ETFs
- *     summary: Get all ETF data
- *     description: Retrieve all ETF documents from the database, with optional limit.
+ *     summary: Get all ETF data or the latest entry for each symbol
+ *     description: >
+ *       Retrieve all ETF documents from the database.
+ *       Use `?latest=true` to get only the most recent entry for each ETF symbol.
+ *       Use `?limit=` to limit the number of documents returned.
  *     parameters:
  *       - in: query
  *         name: limit
@@ -20,57 +23,54 @@ const router = express.Router();
  *           type: integer
  *           example: 10
  *         description: Limit the number of ETF documents returned.
+ *       - in: query
+ *         name: latest
+ *         schema:
+ *           type: boolean
+ *           example: true
+ *         description: If true, return only the latest record for each ETF symbol.
  *     responses:
  *       200:
- *         description: Successfully retrieved all ETFs
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   _id:
- *                     type: string
- *                   symbol:
- *                     type: string
- *                     example: "VOO"
- *                   Date:
- *                     type: string
- *                     example: "2024-01-15"
- *                   Open:
- *                     type: number
- *                     example: 450.12
- *                   Close:
- *                     type: number
- *                     example: 452.56
- *                   Volume:
- *                     type: number
- *                     example: 1200000
+ *         description: Successfully retrieved ETFs
  *       500:
  *         description: Failed to fetch ETFs
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "Failed to fetch ETFs"
  */
 router.get('/etfs', async (req, res) => {
   try {
     await db.setCollection('etfs');
-    // Parse limit from query (defaults to 0 = no limit)
     const limit = parseInt(req.query.limit) || 0;
+    const latest = req.query.latest === 'true';
 
-    // Fetch all ETF documents with optional limit
+    if (latest) {
+      // Only the most recent record per symbol
+      const allEtfs = await db.collection.find({}).sort({ Date: -1 }).limit(limit).toArray();
+
+      const latestEtfMap = new Map();
+
+      for (const etf of allEtfs) {
+        const symbol = etf.fileName;
+        if (symbol && !latestEtfMap.has(symbol)) {
+          latestEtfMap.set(symbol, etf);
+        }
+      }
+
+      const latestEtfs = Array.from(latestEtfMap.values()).
+        /*
+          Sort alphabetically by fileName.
+          Source:https://stackoverflow.com/questions/6712034/sort-array-by-firstname-
+          alphabetically-in-javascript
+        */
+        sort((a, b) => a.fileName.localeCompare(b.fileName));
+
+      return res.json(latestEtfs.map(transformPriceData));
+    }
+
+    // Regular fetch
     const etfs = await db.collection.find({}).limit(limit).toArray();
+    res.json(etfs.map(transformPriceData));
 
-    res.status(200).json(etfs.map(transformPriceData));
   } catch (error) {
     console.error('Error fetching ETFs:', error);
-    // Throw 500 for internal server issues
     res.status(500).json({ error: 'Failed to fetch ETFs' });
   }
 });
@@ -104,7 +104,10 @@ router.get('/etfs/:symbol', async (req, res) => {
     await db.setCollection('etfs');
     const symbol = req.params.symbol.toUpperCase();
 
-    const etfDataForSymbol = await db.collection.find({ fileName: symbol }).toArray();
+    // Always sort by date ascending (oldest first)
+    const etfDataForSymbol = await db.collection.find({ fileName: symbol }).sort(
+      { Date: 1 }
+    ).toArray();
 
     if (etfDataForSymbol.length === 0) {
       // Throw 404 if no data found for the symbol
