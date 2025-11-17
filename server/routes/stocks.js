@@ -76,6 +76,56 @@ router.get('/stocks', async (req, res) => {
 
 /**
  * @swagger
+ * /api/stocks/search:
+ *   get:
+ *     tags:
+ *       - Stocks
+ *     summary: Search stocks by date range
+ *     description: Retrieve stock data between specific start and end dates.
+ *     parameters:
+ *       - in: query
+ *         name: start
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: "2023-01-01"
+ *       - in: query
+ *         name: end
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: "2023-01-31"
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved stock data in date range
+ *       400:
+ *         description: Missing start or end query parameters
+ *       500:
+ *         description: Failed to fetch stock data in date range
+ */
+router.get('/stocks/search', async (req, res) => {
+  try {
+    await db.setCollection('stocks');
+
+    const { start, end } = req.query;
+
+    if (!start || !end) {
+      return res.status(400).json({ error: 'start and end query parameters are required' });
+    }
+
+    const searchedData = await db.collection.find({
+      date: { $gte: start, $lte: end }
+    }).toArray();
+
+    res.json(searchedData.map(transformPriceData));
+  } catch (error) {
+    console.error('Error fetching stock data in date range:', error);
+    res.status(500).json({ error: 'Failed to fetch stock data in date range' });
+  }
+});
+
+/**
+ * @swagger
  * /api/stocks/{symbol}:
  *   get:
  *     tags:
@@ -161,56 +211,6 @@ router.get('/stocks/:symbol/latest', async (req, res) => {
   } catch (error) {
     console.error('Error fetching latest:', error);
     res.status(500).json({ error: 'Failed to fetch latest stock data' });
-  }
-});
-
-/**
- * @swagger
- * /api/stocks/search:
- *   get:
- *     tags:
- *       - Stocks
- *     summary: Search stocks by date range
- *     description: Retrieve stock data between specific start and end dates.
- *     parameters:
- *       - in: query
- *         name: start
- *         required: true
- *         schema:
- *           type: string
- *           example: "2023-01-01"
- *       - in: query
- *         name: end
- *         required: true
- *         schema:
- *           type: string
- *           example: "2023-01-31"
- *     responses:
- *       200:
- *         description: Successfully retrieved stock data in date range
- *       400:
- *         description: Missing start or end query parameters
- *       500:
- *         description: Failed to fetch stock data in date range
- */
-router.get('/stocks/search', async (req, res) => {
-  try {
-    await db.setCollection('stocks');
-
-    const { start, end } = req.query;
-
-    if (!start || !end) {
-      return res.status(400).json({ error: 'start and end query parameters are required' });
-    }
-
-    const searchedData = await db.collection.find({
-      date: { $gte: start, $lte: end }
-    }).toArray();
-
-    res.json(searchedData.map(transformPriceData));
-  } catch (error) {
-    console.error('Error fetching stock data in date range:', error);
-    res.status(500).json({ error: 'Failed to fetch stock data in date range' });
   }
 });
 
