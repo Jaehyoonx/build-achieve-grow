@@ -69,11 +69,13 @@ describe('GET /api/stocks/:symbol', () => {
     sinon.stub(db, 'connect').resolves();
     sinon.stub(db, 'setCollection').resolves();
 
-    // Mock the collection with find().toArray()
+    // Mock the collection with find().sort().toArray()
     db.collection = {
       find: sinon.stub().returns({
-        toArray: () => 
-          Promise.resolve(sampleStocks)
+        sort: () => ({
+          toArray: () => 
+            Promise.resolve(sampleStocks)
+        })
       })
     };
   });

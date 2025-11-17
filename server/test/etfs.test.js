@@ -67,7 +67,9 @@ describe('GET /api/etfs/:symbol', () => {
 
     db.collection = {
       find: sinon.stub().returns({
-        toArray: () => Promise.resolve(sampleEtfs)
+        sort: () => ({
+          toArray: () => Promise.resolve(sampleEtfs)
+        })
       })
     };
   });
@@ -84,7 +86,9 @@ describe('GET /api/etfs/:symbol', () => {
 
   it('should return 404 if ETF symbol not found', async () => {
     db.collection.find.returns({
-      toArray: () => Promise.resolve([])
+      sort: () => ({
+        toArray: () => Promise.resolve([])
+      })
     });
     const res = await request(app).get('/api/etfs/XYZ');
     expect(res.status).to.equal(404);
