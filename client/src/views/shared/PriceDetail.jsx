@@ -56,7 +56,7 @@ export default function PriceDetail({ type, symbol, onBack }) {
       {latest &&
         <PriceCard
           symbol={latest.Symbol}
-          currentPrice={latest.Close}
+          latestPrice={latest.Close}
           previousClose={previousPrice}
         />
       }
