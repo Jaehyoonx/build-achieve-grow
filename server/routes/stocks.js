@@ -113,6 +113,22 @@ router.get('/stocks/search', async (req, res) => {
       return res.status(400).json({ error: 'start and end query parameters are required' });
     }
 
+    // Validate date format (YYYY-MM-DD)
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(start) || !dateRegex.test(end)) {
+      return res.status(400).json({ error: 'Date format must be YYYY-MM-DD' });
+    }
+
+    // Validate date range logic
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      return res.status(400).json({ error: 'Invalid date provided' });
+    }
+    if (startDate > endDate) {
+      return res.status(400).json({ error: 'Start date must be before end date' });
+    }
+
     const searchedData = await db.collection.find({
       date: { $gte: start, $lte: end }
     }).toArray();
@@ -158,6 +174,12 @@ router.get('/stocks/:symbol', async (req, res) => {
     await db.setCollection('stocks');
     const symbol = req.params.symbol.toUpperCase();
 
+    // Validate symbol format
+    // Check if symbol contains only alphanumeric characters and is not longer than 5 characters
+    if (!/^[A-Z0-9]+$/.test(symbol) || symbol.length > 5) {
+      return res.status(400).json({ error: 'Invalid symbol format' });
+    }
+
     // Always sort by date ascending (oldest first)
     const stockDataForSymbol = await db.collection.find({ fileName: symbol }).sort(
       { Date: 1 }
@@ -201,6 +223,11 @@ router.get('/stocks/:symbol/latest', async (req, res) => {
   try {
     await db.setCollection('stocks');
     const symbol = req.params.symbol.toUpperCase();
+
+    // Validate symbol format
+    if (!/^[A-Z0-9]+$/.test(symbol) || symbol.length > 5) {
+      return res.status(400).json({ error: 'Invalid symbol format' });
+    }
     /*
       Find the latest entry by sorting by date descending and limiting to 1
       -1 indicates descending order
@@ -249,6 +276,11 @@ router.get('/stocks/:symbol/prev-close', async (req, res) => {
   try {
     await db.setCollection('stocks');
     const symbol = req.params.symbol.toUpperCase();
+
+    // Validate symbol format
+    if (!/^[A-Z0-9]+$/.test(symbol) || symbol.length > 5) {
+      return res.status(400).json({ error: 'Invalid symbol format' });
+    }
 
     const records = await db.collection.find({ fileName: symbol }).
       sort({ Date: -1 }).
