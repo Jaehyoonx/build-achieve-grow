@@ -16,7 +16,7 @@ export default function EtfGrid() {
           key={etf.Symbol}
           symbol={etf.Symbol}
           latestPrice={etf.Close}
-          previousClose={etf.AdjClose}
+          previousClose={etf.previousClose}
           onClick={onClick}
         />
       }
