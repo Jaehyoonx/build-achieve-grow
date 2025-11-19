@@ -13,6 +13,7 @@ export default function PriceChart({ data, symbol }) {
   // State for date range filtering
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [rangeError, setRangeError] = useState('');
 
   /*
     'data' is expected to be an array like:
@@ -98,6 +99,17 @@ export default function PriceChart({ data, symbol }) {
   const chartHeight = getChartHeight();
   const fontSize = getResponsiveFontSize();
 
+  const handleEndDateClick = () => {
+    if (!startDate) {
+      setRangeError('Please select a Start Date first.');
+    }
+  };
+
+  const handleStartDateChange = (value) => {
+    setStartDate(value);
+    setRangeError('');
+  };
+
   return (
     <div className="price-chart-container">
 
@@ -117,7 +129,7 @@ export default function PriceChart({ data, symbol }) {
             id="startDate"
             type="date"
             value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            onChange={(e) => handleStartDateChange(e.target.value)}
             min={minDate}
             max={maxDate}
             className="date-input"
@@ -126,18 +138,33 @@ export default function PriceChart({ data, symbol }) {
         </div>
 
         <div className="date-input-group">
-          <label htmlFor="endDate" className="date-label">
+          <label 
+            htmlFor="endDate" 
+            className="date-label"
+            style={{
+              opacity: !startDate ? 0.5 : 1,
+              cursor: !startDate ? 'not-allowed' : 'pointer'
+            }}
+          >
             End Date
           </label>
           <input
             id="endDate"
             type="date"
             value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            min={minDate}
+            onClick={handleEndDateClick}
+            onChange={(e) => {
+              if (!startDate) return;
+              setEndDate(e.target.value);
+            }}
+            min={startDate || minDate}
             max={maxDate}
             className="date-input"
-            title="Choose the ending date for your price chart"
+            style={{
+              opacity: startDate ? 1 : 0.5,
+              pointerEvents: startDate ? 'auto' : 'none'
+            }}
+            title={!startDate ? 'Select a Start Date first' : 'Choose your end date'}
           />
         </div>
 
@@ -152,6 +179,12 @@ export default function PriceChart({ data, symbol }) {
           Reset
         </button>
       </div>
+
+      {rangeError &&
+        <p className="error-text" style={{ color: 'red', marginTop: '4px' }}>
+          {rangeError}
+        </p>
+      }
 
       <div className="chart-info">
         <span className="data-counter">
