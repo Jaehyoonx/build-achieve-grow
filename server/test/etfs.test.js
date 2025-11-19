@@ -30,6 +30,32 @@ const sampleEtfs = [
   }
 ];
 
+// Mock data for prev-close test - VOO with 2 records
+const sampleVooRecords = [
+  {
+    _id: 1,
+    fileName: 'VOO',
+    Date: '2025-11-10',
+    Open: '451.50',
+    High: '453.00',
+    Low: '450.00',
+    Close: '452.50',
+    'Adj Close': '452.40',
+    Volume: '1300000'
+  },
+  {
+    _id: 2,
+    fileName: 'VOO',
+    Date: '2025-11-09',
+    Open: '450.12',
+    High: '452.55',
+    Low: '448.34',
+    Close: '451.22',
+    'Adj Close': '451.10',
+    Volume: '1200000'
+  }
+];
+
 // Tests for /api/etfs
 describe('GET /api/etfs', () => {
   beforeEach(() => {
@@ -131,6 +157,60 @@ describe('GET /api/etfs/:symbol/latest', () => {
       })
     });
     const res = await request(app).get('/api/etfs/XYZ/latest');
+    expect(res.status).to.equal(404);
+  });
+});
+
+// Tests for /api/etfs/:symbol/prev-close
+describe('GET /api/etfs/:symbol/prev-close', () => {
+  beforeEach(() => {
+    sinon.stub(db, 'connect').resolves();
+    sinon.stub(db, 'setCollection').resolves();
+
+    // Mock returning 2 VOO records sorted by date DESC (latest first, second-latest second)
+    db.collection = {
+      find: sinon.stub().returns({
+        sort: () => ({
+          limit: () => ({
+            toArray: () => Promise.resolve(sampleVooRecords)
+          })
+        })
+      })
+    };
+  });
+
+  afterEach(() => sinon.restore());
+
+  it('should return the second-latest close price', async () => {
+    const res = await request(app).get('/api/etfs/VOO/prev-close');
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.property('previousClose');
+    expect(res.body.previousClose).to.be.a('number');
+    expect(res.body.previousClose).to.equal(451.22);
+  });
+
+  it('should return current close if only 1 record exists', async () => {
+    db.collection.find.returns({
+      sort: () => ({
+        limit: () => ({
+          toArray: () => Promise.resolve([sampleVooRecords[0]])
+        })
+      })
+    });
+    const res = await request(app).get('/api/etfs/VOO/prev-close');
+    expect(res.status).to.equal(200);
+    expect(res.body.previousClose).to.equal(452.50);
+  });
+
+  it('should return 404 if symbol not found', async () => {
+    db.collection.find.returns({
+      sort: () => ({
+        limit: () => ({
+          toArray: () => Promise.resolve([])
+        })
+      })
+    });
+    const res = await request(app).get('/api/etfs/XYZ/prev-close');
     expect(res.status).to.equal(404);
   });
 });

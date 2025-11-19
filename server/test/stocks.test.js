@@ -30,6 +30,32 @@ const sampleStocks = [
   }
 ];
 
+// Mock data for prev-close test - AAPL with 2 records
+const sampleAaplRecords = [
+  {
+    _id: 1,
+    fileName: 'AAPL',
+    Date: '2025-11-10',
+    Open: '181.50',
+    High: '183.00',
+    Low: '180.00',
+    Close: '182.50',
+    'Adj Close': '182.40',
+    Volume: '55000000'
+  },
+  {
+    _id: 2,
+    fileName: 'AAPL',
+    Date: '2025-11-09',
+    Open: '180.12',
+    High: '182.55',
+    Low: '177.34',
+    Close: '181.22',
+    'Adj Close': '181.10',
+    Volume: '50000000'
+  }
+];
+
 // Test the /api/stocks endpoint
 describe('GET /api/stocks', () => {
   beforeEach(() => {
@@ -115,6 +141,59 @@ describe('GET /api/stocks/:symbol/latest', () => {
     expect(res.status).to.equal(200);
     expect(res.body.Symbol).to.equal('AAPL');
     expect(res.body.Close).to.equal(181.22);
+  });
+});
+
+describe('GET /api/stocks/:symbol/prev-close', () => {
+  beforeEach(() => {
+    sinon.stub(db, 'connect').resolves();
+    sinon.stub(db, 'setCollection').resolves();
+
+    // Mock returning 2 AAPL records sorted by date DESC (latest first, second-latest second)
+    db.collection = {
+      find: sinon.stub().returns({
+        sort: () => ({
+          limit: () => ({
+            toArray: () => Promise.resolve(sampleAaplRecords)
+          })
+        })
+      })
+    };
+  });
+
+  afterEach(() => sinon.restore());
+
+  it('should return the second-latest close price', async () => {
+    const res = await request(app).get('/api/stocks/AAPL/prev-close');
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.property('previousClose');
+    expect(res.body.previousClose).to.be.a('number');
+    expect(res.body.previousClose).to.equal(181.22);
+  });
+
+  it('should return current close if only 1 record exists', async () => {
+    db.collection.find.returns({
+      sort: () => ({
+        limit: () => ({
+          toArray: () => Promise.resolve([sampleAaplRecords[0]])
+        })
+      })
+    });
+    const res = await request(app).get('/api/stocks/AAPL/prev-close');
+    expect(res.status).to.equal(200);
+    expect(res.body.previousClose).to.equal(182.50);
+  });
+
+  it('should return 404 if symbol not found', async () => {
+    db.collection.find.returns({
+      sort: () => ({
+        limit: () => ({
+          toArray: () => Promise.resolve([])
+        })
+      })
+    });
+    const res = await request(app).get('/api/stocks/XYZ/prev-close');
+    expect(res.status).to.equal(404);
   });
 });
 
