@@ -216,6 +216,56 @@ router.get('/etfs/:symbol/latest', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/etfs/{symbol}/prev-close:
+ *   get:
+ *     tags:
+ *       - ETFs
+ *     summary: Get the second-latest close price for an ETF symbol
+ *     description: Returns the Close price from the second-most recent trading day.
+ *     parameters:
+ *       - in: path
+ *         name: symbol
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ETF symbol
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved previous close price
+ *       404:
+ *         description: Symbol not found
+ *       500:
+ *         description: Failed to fetch data
+ */
+router.get('/etfs/:symbol/prev-close', async (req, res) => {
+  try {
+    await db.setCollection('etfs');
+    const symbol = req.params.symbol.toUpperCase();
+
+    const records = await db.collection.find({ fileName: symbol }).
+      sort({ Date: -1 }).
+      limit(2).
+      toArray();
+
+    if (records.length === 0) {
+      return res.status(404).json({ error: 'Symbol not found' });
+    }
+
+    // If only 1 record exists, return that close price
+    if (records.length === 1) {
+      return res.json({ previousClose: Number(records[0].Close) });
+    }
+
+    // Return the second record's close (second-latest)
+    res.json({ previousClose: Number(records[1].Close) });
+  } catch (error) {
+    console.error('Error fetching previous close:', error);
+    res.status(500).json({ error: 'Failed to fetch previous close' });
+  }
+});
+
 //-------------end of ETFs Section-------------
 
 export default router;
