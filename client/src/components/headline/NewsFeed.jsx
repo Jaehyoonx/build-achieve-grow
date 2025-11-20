@@ -5,11 +5,15 @@ import { useEffect, useState } from 'react';
 export default function NewsFeed() {
   const [headlines, setHeadlines] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedFile, setSelectedFile] = useState('all');
   const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     const fetchHeadlines = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
         let url; 
         if(selectedFile === 'all') {
@@ -18,13 +22,13 @@ export default function NewsFeed() {
           url = `/api/headlines/${selectedFile}`;
         }
         const res = await fetch(url);
-        if (!res.ok) throw new Error('Network response was not ok');
+        if (!res.ok) throw new Error('Failed to fetch headlines');
         const data = await res.json();
-        
         
         setHeadlines(data);
       } catch (err) {
         console.error('Error fetching headlines:', err);
+        setError(err.message || 'Failed to load headlines');
       } finally {
         setLoading(false);
       }
@@ -32,20 +36,22 @@ export default function NewsFeed() {
     fetchHeadlines();
   }, [selectedFile]);
 
-  const filtered = headlines.filter(desired => {
-    if (!searchText) return true; 
+  if (loading) {
+    return <div>Loading Headlines...</div>;
+  }
 
-    //This will make the word into lowercase so that it can search better
+  if (error) {
+    return <div style={{ color: 'red' }}>Error: {error}</div>;
+  }
+
+  const filtered = headlines.filter(desired => {
+    if (!searchText) return true;
     const word = searchText.toLowerCase();
     return (
       desired.Headlines.toLowerCase().includes(word) ||
-    desired.Description.toLowerCase().includes(word)
+      desired.Description.toLowerCase().includes(word)
     );
   });
-
-  if (loading) {
-    return <div> Loading Headlines </div>;
-  }
 
   return <div>
     <h2>News Feed</h2>

@@ -4,12 +4,16 @@ import { useEffect, useState } from 'react';
 export default function HeadlineList({ year }) {
   const [headlines, setHeadlines] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
  
   useEffect(() => {
     const fetchHeadlines = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
         const res = await fetch('/api/headlines');
-        if (!res.ok) throw new Error('Network response was not ok');
+        if (!res.ok) throw new Error('Failed to fetch headlines');
         const data = await res.json();
         
         //Just in case its a little complicated with the regex
@@ -23,6 +27,7 @@ export default function HeadlineList({ year }) {
         setHeadlines(filetered);
       } catch (err) {
         console.error('Error fetching headlines:', err);
+        setError(err.message || 'Failed to load headlines');
       } finally {
         setLoading(false);
       }
@@ -34,7 +39,11 @@ export default function HeadlineList({ year }) {
   }, [year]);
 
   if (loading) {
-    return <div> Loading Headlines </div>;
+    return <div>Loading Headlines...</div>;
+  }
+
+  if (error) {
+    return <div style={{ color: 'red' }}>Error: {error}</div>;
   }
   return (
     <div>
