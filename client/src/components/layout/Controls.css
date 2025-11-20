@@ -1,0 +1,30 @@
+.controls {
+  display: flex;
+  gap: 16px;
+  padding: 16px 32px;
+  background-color: #000;
+  border-bottom: 1px solid #333;
+}
+
+.control-btn {
+  padding: 12px 24px;
+  background-color: #000;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+  background-color: #333;
+  border-color: #fff;
+}
+
+.control-btn.active {
+  background-color: #fff;
+  color: #000;
+  border-color: #fff;
+}
