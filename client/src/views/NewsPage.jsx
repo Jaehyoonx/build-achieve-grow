@@ -1,8 +1,8 @@
 // View: Home
 // Purpose: Landing page with navigation to Stock Grid, ETF Grid, comparisons, etc.
 import { useState } from 'react';
-import HeadlineList from '../components/HeadlineList';
-import NewsFeed from '../components/NewsFeed';
+import HeadlineList from '../components/headline/HeadlineList';
+import NewsFeed from '../components/headline/NewsFeed';
 export default function NewsPage() {
   const [yearInput, setYearInput] = useState('');
   const [searchYear, setSearchYear] = useState('');
