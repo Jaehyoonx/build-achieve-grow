@@ -56,6 +56,10 @@ router.get('/headlines', async (req, res) => {
     await db.setCollection('headlines');
     const limit = parseInt(req.query.limit) || 300;
     const headlines = await db.collection.find({}).limit(limit).toArray();
+
+    //Cache Control improvement for 1 hour
+    res.set('Cache-Control', 'public, max-age=3600');
+    
     res.json(headlines);
   } catch (error) {
     console.error('cant fetch', error);
@@ -137,6 +141,10 @@ router.get('/headlines/:source', async (req, res) => {
 
     const limit = parseInt(req.query.limit) || 300;
     const headlines = await db.collection.find({ fileName: source }).limit(limit).toArray();
+
+    //Cache Control improvement for 1 hour
+    res.set('Cache-Control', 'public, max-age=3600');
+
     res.json(headlines);
     
   } catch (error) {
