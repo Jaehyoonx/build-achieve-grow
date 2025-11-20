@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 import PriceCard from '../../components/shared/PriceCard';
 import PriceChart from '../../components/shared/PriceChart';
+import './PriceDetail.css';
 
 export default function PriceDetail({ type, symbol, onBack }) {
 
@@ -49,22 +50,26 @@ export default function PriceDetail({ type, symbol, onBack }) {
     fetchData();
   }, [symbol, type]);
 
-  if (loading) return <p>Loading data...</p>;
+  if (loading) return <div className="price-detail-loading">Loading data...</div>;
 
   if (error) {
     return (
-      <div>
-        <button onClick={onBack}>← Back</button>
-        <p style={{ color: 'red' }}>Error: {error}</p>
+      <div className="price-detail-container">
+        <div className="price-detail-header">
+          <button className="price-detail-back-btn" onClick={onBack}>← Back</button>
+        </div>
+        <div className="price-detail-error">Error: {error}</div>
       </div>
     );
   }
 
   if (!latest || history.length === 0) {
     return (
-      <div>
-        <button onClick={onBack}>← Back</button>
-        <p>No data available for {symbol}</p>
+      <div className="price-detail-container">
+        <div className="price-detail-header">
+          <button className="price-detail-back-btn" onClick={onBack}>← Back</button>
+        </div>
+        <div className="price-detail-empty">No data available for {symbol}</div>
       </div>
     );
   }
@@ -78,22 +83,29 @@ export default function PriceDetail({ type, symbol, onBack }) {
   }
 
   return (
-    <div>
-      <button onClick={onBack}>← Back</button>
+    <div className="price-detail-container">
+      <div className="price-detail-header">
+        <button className="price-detail-back-btn" onClick={onBack}>← Back</button>
+        <div className="price-detail-symbol">{symbol}</div>
+      </div>
 
-      {latest &&
-        <PriceCard
-          symbol={latest.Symbol}
-          latestPrice={latest.Close}
-          previousClose={previousPrice}
-        />
-      }
+      <div className="price-detail-content">
+        {latest &&
+          <div className="price-detail-card">
+            <PriceCard
+              symbol={latest.Symbol}
+              latestPrice={latest.Close}
+              previousClose={previousPrice}
+            />
+          </div>
+        }
 
-      <div>
-        <PriceChart
-          data={history.map(h => ({ date: h.Date, price: h.Close }))}
-          symbol={symbol}
-        />
+        <div className="price-detail-chart">
+          <PriceChart
+            data={history.map(h => ({ date: h.Date, price: h.Close }))}
+            symbol={symbol}
+          />
+        </div>
       </div>
     </div>
   );

@@ -16,7 +16,7 @@
 /* Chart title/heading */
 .price-chart-title {
   margin-top: 0;
-  font-size: 1.5rem;
+  font-size: 24px;
   color: #333;
   text-align: center;
 }
@@ -25,7 +25,7 @@
 .price-chart-description {
   text-align: center;
   color: #666;
-  font-size: 0.95rem;
+  font-size: 15.2px;
   margin: 5px 0 20px 0;
 }
 
@@ -54,7 +54,7 @@
 .date-label {
   font-weight: bold;
   color: #555;
-  font-size: 0.95rem;
+  font-size: 15.2px;
 }
 
 /* Input fields for start and end date */
@@ -165,12 +165,12 @@
   }
 
   .price-chart-title {
-    font-size: 1.2rem;
+    font-size: 19.2px;
     text-align: center;
   }
 
   .price-chart-description {
-    font-size: 0.85rem;
+    font-size: 13.6px;
     margin: 5px 0 15px 0;
   }
 
@@ -187,7 +187,7 @@
   }
 
   .date-label {
-    font-size: 0.85rem;
+    font-size: 13.6px;
     text-align: left;
   }
 
@@ -221,7 +221,7 @@
   }
 
   .price-chart-title {
-    font-size: 1.3rem;
+    font-size: 20.8px;
   }
 
   .date-range-selector {
@@ -240,7 +240,7 @@
   }
 
   .price-chart-title {
-    font-size: 1.5rem;
+    font-size: 24px;
   }
 
   .date-range-selector {
