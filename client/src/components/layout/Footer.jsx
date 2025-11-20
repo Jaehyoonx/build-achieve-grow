@@ -27,7 +27,7 @@ export default function Footer() {
           </a>{' '}
           and{' '}
           <a
-            href="https://www.kaggle.com/datasets/ankurzing/sentiment-analysis-for-financial-news"
+            href="https://www.kaggle.com/datasets/notlucasp/financial-news-headlines"
             target="_blank"
             rel="noopener noreferrer"
           >
