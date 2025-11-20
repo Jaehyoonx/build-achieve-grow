@@ -13,22 +13,31 @@ export default function CompareStocks() {
   const [dataB, setDataB] = useState([]);
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
       if (stockA && stockB) {
         setLoading(true);
+        setError(null);
 
-        const resA = await fetch(`/api/stocks/${stockA}`);
-        const jsonA = await resA.json();
+        try {
+          const resA = await fetch(`/api/stocks/${stockA}`);
+          if (!resA.ok) throw new Error(`Failed to fetch ${stockA}`);
+          const jsonA = await resA.json();
 
-        const resB = await fetch(`/api/stocks/${stockB}`);
-        const jsonB = await resB.json();
-        
-        setDataA(jsonA);
-        setDataB(jsonB);
-        setLoading(false);
-
+          const resB = await fetch(`/api/stocks/${stockB}`);
+          if (!resB.ok) throw new Error(`Failed to fetch ${stockB}`);
+          const jsonB = await resB.json();
+          
+          setDataA(jsonA);
+          setDataB(jsonB);
+        } catch (err) {
+          console.error('Error fetching stock data:', err);
+          setError(err.message || 'Failed to load comparison data');
+        } finally {
+          setLoading(false);
+        }
       }
     }
 
@@ -37,6 +46,37 @@ export default function CompareStocks() {
 
   if (loading){
     return <p>Loading comparison data...</p>;
+  }
+
+  if (error) {
+    return (
+      <div>
+        <h2>Compare Stocks</h2>
+        <p style={{ color: 'red' }}>Error: {error}</p>
+        <div>
+          <label>
+            Stock A:
+            <input 
+              type="text" 
+              value={stockA || ''} 
+              onChange={e => setStockA(e.target.value.toUpperCase())} 
+              placeholder="Enter stock symbol (e.g., AAPL)" 
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Stock B:
+            <input 
+              type="text" 
+              value={stockB || ''} 
+              onChange={e => setStockB(e.target.value.toUpperCase())} 
+              placeholder="Enter stock symbol (e.g., MSFT)" 
+            />
+          </label>
+        </div>
+      </div>
+    );
   }
 
   return (

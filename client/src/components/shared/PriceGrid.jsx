@@ -24,6 +24,7 @@ export default function PriceGrid({
       try {
         setLoading(true);
         const response = await fetch(fetchUrl);
+        if (!response.ok) throw new Error('Failed to fetch data');
         const data = await response.json();
         
         // For each item, fetch the second-latest close price
@@ -33,6 +34,7 @@ export default function PriceGrid({
               // Extract type from fetchUrl
               const type = fetchUrl.includes('etfs') ? 'etfs' : 'stocks';
               const prevRes = await fetch(`/api/${type}/${item.Symbol}/prev-close`);
+              if (!prevRes.ok) throw new Error('Failed to fetch previous close');
               const prevData = await prevRes.json();
               
               return {
