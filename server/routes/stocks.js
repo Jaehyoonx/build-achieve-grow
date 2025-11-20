@@ -62,10 +62,18 @@ router.get('/stocks', async (req, res) => {
           alphabetically-in-javascript
         */
         sort((a, b) => a.fileName.localeCompare(b.fileName));
+
+      // Cache Control improvement for 1 hour
+      res.set('Cache-Control', 'public, max-age=3600');
+
       res.json(latestStocks.map(transformPriceData));
     } else {
       // Regular fetch: return all or limited records
       const stocks = await db.collection.find({}).limit(limit).toArray();
+
+      // Cache Control improvement for 1 hour
+      res.set('Cache-Control', 'public, max-age=3600');
+
       res.json(stocks.map(transformPriceData));
     }
   } catch (error) {
@@ -133,6 +141,9 @@ router.get('/stocks/search', async (req, res) => {
       date: { $gte: start, $lte: end }
     }).toArray();
 
+    // Cache Control improvement for 1 hour
+    res.set('Cache-Control', 'public, max-age=3600');
+
     res.json(searchedData.map(transformPriceData));
   } catch (error) {
     console.error('Error fetching stock data in date range:', error);
@@ -189,6 +200,9 @@ router.get('/stocks/:symbol', async (req, res) => {
       return res.status(404).json({ error: 'Symbol not found' });
     }
 
+    // Cache Control improvement for 1 hour
+    res.set('Cache-Control', 'public, max-age=3600');
+
     res.json(stockDataForSymbol.map(transformPriceData));
   } catch (error) {
     console.error('Error fetching stock:', error);
@@ -242,6 +256,9 @@ router.get('/stocks/:symbol/latest', async (req, res) => {
       return res.status(404).json({ error: 'Symbol not found' });
     }
 
+    // Cache Control improvement for 1 hour
+    res.set('Cache-Control', 'public, max-age=3600');
+
     res.json(transformPriceData(latest[0]));
   } catch (error) {
     console.error('Error fetching latest:', error);
@@ -293,8 +310,14 @@ router.get('/stocks/:symbol/prev-close', async (req, res) => {
 
     // If only 1 record exists, return that close price
     if (records.length === 1) {
+      // Cache Control improvement for 1 hour
+      res.set('Cache-Control', 'public, max-age=3600');
+
       return res.json({ previousClose: Number(records[0].Close) });
     }
+
+    // Cache Control improvement for 1 hour
+    res.set('Cache-Control', 'public, max-age=3600');
 
     // Return the second record's close (second-latest)
     res.json({ previousClose: Number(records[1].Close) });
