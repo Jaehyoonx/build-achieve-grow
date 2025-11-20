@@ -71,15 +71,25 @@ export default function PriceGrid({
     return <p style={{ color: 'red' }}>{error}</p>;
   }
 
-  if (selectedSymbol) {
-    return renderDetail(selectedSymbol, () => setSelectedSymbol(null));
-  }
-
   return (
     <div className="price-grid">
-      {items.map(item =>
-        renderCard(item, () => setSelectedSymbol(item.Symbol))
-      )}
+      {/* Left Panel: Grid of Cards */}
+      <div className="price-grid-left">
+        {items.map(item =>
+          renderCard(item, () => setSelectedSymbol(item.Symbol))
+        )}
+      </div>
+
+      {/* Right Panel: Detail View */}
+      <div className="price-grid-right">
+        {selectedSymbol ?
+          renderDetail(selectedSymbol, () => setSelectedSymbol(null))
+          :
+          <div className="price-grid-empty">
+            <p>Select a {fetchUrl.includes('etfs') ? 'ETF' : 'stock'} to view details</p>
+          </div>
+        }
+      </div>
     </div>
   );
 }
