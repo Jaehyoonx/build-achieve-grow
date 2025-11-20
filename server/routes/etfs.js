@@ -62,11 +62,18 @@ router.get('/etfs', async (req, res) => {
         */
         sort((a, b) => a.fileName.localeCompare(b.fileName));
 
+      // Cache Control improvement for 1 hour
+      res.set('Cache-Control', 'public, max-age=3600');
+
       return res.json(latestEtfs.map(transformPriceData));
     }
 
     // Regular fetch
     const etfs = await db.collection.find({}).limit(limit).toArray();
+
+    // Cache Control improvement for 1 hour
+    res.set('Cache-Control', 'public, max-age=3600');
+
     res.json(etfs.map(transformPriceData));
 
   } catch (error) {
@@ -135,6 +142,9 @@ router.get('/etfs/search', async (req, res) => {
       Date: { $gte: start, $lte: end }
     }).toArray();
 
+    // Cache Control improvement for 1 hour
+    res.set('Cache-Control', 'public, max-age=3600');
+
     res.json(searchedData.map(transformPriceData));
   } catch (error) {
     console.error('Error fetching ETF data in date range:', error);
@@ -186,6 +196,9 @@ router.get('/etfs/:symbol', async (req, res) => {
       return res.status(404).json({ error: 'ETF symbol not found' });
     }
 
+    // Cache Control improvement for 1 hour
+    res.set('Cache-Control', 'public, max-age=3600');
+
     res.json(etfDataForSymbol.map(transformPriceData));
   } catch (error) {
     console.error('Error fetching ETF:', error);
@@ -234,6 +247,9 @@ router.get('/etfs/:symbol/latest', async (req, res) => {
       // Throw 404 if no data found for the symbol
       return res.status(404).json({ error: 'ETF symbol not found' });
     }
+
+    // Cache Control improvement for 1 hour
+    res.set('Cache-Control', 'public, max-age=3600');
 
     res.json(transformPriceData(latest[0]));
   } catch (error) {
@@ -286,8 +302,14 @@ router.get('/etfs/:symbol/prev-close', async (req, res) => {
 
     // If only 1 record exists, return that close price
     if (records.length === 1) {
+      // Cache Control improvement for 1 hour
+      res.set('Cache-Control', 'public, max-age=3600');
+
       return res.json({ previousClose: Number(records[0].Close) });
     }
+
+    // Cache Control improvement for 1 hour
+    res.set('Cache-Control', 'public, max-age=3600');
 
     // Return the second record's close (second-latest)
     res.json({ previousClose: Number(records[1].Close) });
