@@ -54,7 +54,7 @@ const router = express.Router();
 router.get('/headlines', async (req, res) => {
   try {
     await db.setCollection('headlines');
-    const limit = parseInt(req.query.limit) || 20;
+    const limit = parseInt(req.query.limit) || 300;
     const headlines = await db.collection.find({}).limit(limit).toArray();
     res.json(headlines);
   } catch (error) {
@@ -135,7 +135,7 @@ router.get('/headlines/:source', async (req, res) => {
     } 
     
 
-    const limit = parseInt(req.query.limit) || 20;
+    const limit = parseInt(req.query.limit) || 300;
     const headlines = await db.collection.find({ fileName: source }).limit(limit).toArray();
     res.json(headlines);
     
