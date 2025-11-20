@@ -29,7 +29,26 @@ try {
     records.forEach(record => {
       record.fileName = filename.replace('.csv', '');
     });
-    return records;
+    //new Feature that takes from 2015 and above so that the website will work faster.
+    const filteredRercord = records.filter(year => {
+      const match = year.Time.match(/\d{4}/);
+      if (!match){
+        return false;
+      } 
+      const year15 = parseInt(match[0]);
+      return year15 >= 2015;
+    });
+    
+    //This will take 50 from each year 2018-2019-2020 there is nothing lower or higher
+    const limitRecords =  [2018, 2019, 2020].
+      map(year => filteredRercord.filter(record => {
+        const match = record.Time.match(/\d{4}/);
+        return match && parseInt(match[0]) === year;
+      }).slice(0, 50)
+      ).flat();
+
+   
+    return limitRecords;
   });
   //Flat makes the arrays turn to be [{}, {}] which Mongo accepts, but without it, 
   // just does [[{}], [{}]]
@@ -60,8 +79,20 @@ try {
     records.forEach(record => {
       record.fileName = filename.replace('.csv', '');
     });
-    return records;
+
+    //new Feature that takes from 2015 and above so that the website will work faster.
+    const filteredRercord = records.filter(year => {
+      const match = year.Date.match(/\d{4}/);
+      if (!match){
+        return false;
+      } 
+      const year15 = parseInt(match[0]);
+      return year15 >= 2015;
+    });
+    
+    return filteredRercord;
   });
+
   //Flat makes the arrays turn to be [{}, {}] which Mongo accepts, but without it, 
   // just does [[{}], [{}]]
   const allStockRecords = (await Promise.all(stockPromises)).flat();
@@ -86,7 +117,17 @@ try {
     records.forEach(record => {
       record.fileName = filename.replace('.csv', '');
     });
-    return records;
+    //new Feature that takes from 2015 and above so that the website will work faster.
+    const filteredRercord = records.filter(year => {
+      const match = year.Date.match(/\d{4}/);
+      if (!match){
+        return false;
+      } 
+      const year15 = parseInt(match[0]);
+      return year15 >= 2015;
+    });
+    
+    return filteredRercord;
   });
 
   //Flat makes the arrays turn to be [{}, {}] which Mongo accepts, but without it, 
