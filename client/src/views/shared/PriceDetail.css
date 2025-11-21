@@ -56,6 +56,13 @@
   padding: 16px;
   border-radius: 8px;
   border: 1px solid #e0e0e0;
+  color: #000;
+}
+
+.price-detail-card h3,
+.price-detail-card p,
+.price-detail-card small {
+  color: #000;
 }
 
 .price-detail-chart {
