@@ -105,6 +105,7 @@ export default function PriceDetail({ type, symbol, onBack }) {
           <PriceChart
             data={history.map(h => ({ date: h.Date, price: h.Close }))}
             symbol={symbol}
+            type={type}
           />
         </div>
       </div>
