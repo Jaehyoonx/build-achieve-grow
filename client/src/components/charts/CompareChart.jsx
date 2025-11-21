@@ -145,6 +145,19 @@ export default function CompareChart({ dataA, dataB, symbolA, symbolB }) {
         View price trends and compare performance of {symbolA} and {symbolB} side-by-side
       </p>
 
+      {/*
+        ResponsiveContainer: Automatically adjusts chart size based on parent
+        Source: Recharts ResponsiveContainer documentation
+        https://recharts.github.io/en-US/examples/AreaResponsiveContainer/
+        
+        Scaling Features:
+        - Width: 100% of parent container for full responsiveness
+        - Height: Dynamically calculated based on viewport (300-400px)
+        - Font sizes: Scale down on mobile devices for readability
+        - Margins: Adjusted spacing for proper label display
+        - Works on mobile (< 640px), tablet (640-1024px), desktop (> 1024px)
+        - Date range filtering: User can zoom into specific date ranges
+      */}
       <div className="chart-wrapper" style={{ height: chartHeight }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={mergedData} margin={chartMargin}>
