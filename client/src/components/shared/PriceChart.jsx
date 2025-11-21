@@ -38,14 +38,15 @@ export default function PriceChart({ data, symbol, type }) {
       try {
         // Determine type based on current context (stocks or etfs)
         const response = await fetch(`/api/${assetType.toLowerCase()}s?latest=true`);
-        if (response.ok) {
-          const stocks = await response.json();
-          const stockSymbols = stocks
-            .map(s => s.Symbol || s.symbol)
-            .filter(s => s !== symbol)
-            .sort();
-          setAvailableStocks(stockSymbols);
+        if (!response.ok) {
+          throw new Error('Failed to fetch available stocks');
         }
+        const stocks = await response.json();
+        const stockSymbols = stocks
+          .map(s => s.Symbol || s.symbol)
+          .filter(s => s !== symbol)
+          .sort();
+        setAvailableStocks(stockSymbols);
       } catch (err) {
         console.error('Failed to fetch available stocks:', err);
       }
