@@ -3,6 +3,7 @@
 // Handles loading, error states, fetching, and selection logic.
 
 import { useState, useEffect } from 'react';
+import './PriceGrid.css';
 
 export default function PriceGrid({
   // e.g. "/api/stocks?limit=50"
@@ -18,12 +19,14 @@ export default function PriceGrid({
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [limit, setLimit] = useState(25);
 
   useEffect(() => {
     async function load() {
       try {
         setLoading(true);
-        const response = await fetch(fetchUrl);
+        const urlWithLimit = `${fetchUrl}&limit=${limit}`;
+        const response = await fetch(urlWithLimit);
         if (!response.ok) throw new Error('Failed to fetch data');
         const data = await response.json();
         
@@ -61,9 +64,13 @@ export default function PriceGrid({
     }
 
     load();
-  }, [fetchUrl]);
+  }, [limit, fetchUrl]);
 
-  if (loading) {
+  const handleLoadMore = () => {
+    setLimit(prevLimit => prevLimit + 25);
+  };
+
+  if (loading && items.length === 0) {
     return <p>Loading data...</p>;
   }
 
@@ -78,6 +85,9 @@ export default function PriceGrid({
         {items.map(item =>
           renderCard(item, () => setSelectedSymbol(item.Symbol))
         )}
+        <button className="load-more-btn" onClick={handleLoadMore}>
+          Click to view more
+        </button>
       </div>
 
       {/* Right Panel: Detail View */}

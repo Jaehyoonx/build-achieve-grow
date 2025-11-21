@@ -9,13 +9,14 @@ import PriceGrid from '../shared/PriceGrid';
 export default function StockGrid() {
   return (
     <PriceGrid
-      fetchUrl="/api/stocks?latest=true&limit=50"
+      fetchUrl="/api/stocks?latest=true"
 
       renderCard={(stock, onClick) => 
         <StockCard
           key={stock.Symbol}
           symbol={stock.Symbol}
           latestPrice={stock.Close}
+          latestDate={stock.Date}
           previousClose={stock.previousClose}
           onClick={onClick}
         />

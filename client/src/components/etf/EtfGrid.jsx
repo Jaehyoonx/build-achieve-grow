@@ -9,13 +9,14 @@ import PriceGrid from '../shared/PriceGrid';
 export default function EtfGrid() {
   return (
     <PriceGrid
-      fetchUrl="/api/etfs?latest=true&limit=50"
+      fetchUrl="/api/etfs?latest=true"
 
       renderCard={(etf, onClick) => 
         <EtfCard
           key={etf.Symbol}
           symbol={etf.Symbol}
           latestPrice={etf.Close}
+          latestDate={etf.Date}
           previousClose={etf.previousClose}
           onClick={onClick}
         />

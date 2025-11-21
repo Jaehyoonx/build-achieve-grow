@@ -1,0 +1,24 @@
+/* Load More Button */
+.load-more-btn {
+  width: 100%;
+  padding: 12px 16px;
+  margin-top: 8px;
+  background-color: #333;
+  color: #fff;
+  border: 2px solid #555;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.load-more-btn:hover {
+  background-color: #444;
+  border-color: #fff;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+.load-more-btn:active {
+  background-color: #222;
+}
