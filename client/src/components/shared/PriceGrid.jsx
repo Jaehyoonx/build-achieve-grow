@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import './PriceGrid.css';
 
 export default function PriceGrid({
-  // e.g. "/api/stocks?limit=50"
+  // e.g. "/api/stocks?latest=true"
   fetchUrl,
   // a function that returns <StockCard .../> or <EtfCard .../>
   renderCard,
@@ -19,7 +19,7 @@ export default function PriceGrid({
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [limit, setLimit] = useState(25);
+  const [limit, setLimit] = useState(10);
 
   useEffect(() => {
     async function load() {
@@ -67,7 +67,7 @@ export default function PriceGrid({
   }, [limit, fetchUrl]);
 
   const handleLoadMore = () => {
-    setLimit(prevLimit => prevLimit + 25);
+    setLimit(prevLimit => prevLimit + 10);
   };
 
   if (loading && items.length === 0) {
