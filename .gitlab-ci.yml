@@ -90,10 +90,9 @@ build-app-archive:
   dependencies:
     - build
     - bundlesize
-  # TODO: Uncomment rules section after testing on MR
-  # rules:
-  #   # Only run on tags on staging or main branch
-  #   - if: $CI_COMMIT_TAG && ($CI_COMMIT_BRANCH == "staging" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH)
+  rules:
+    # Only run on tags on staging or main branch
+    - if: $CI_COMMIT_TAG && ($CI_COMMIT_BRANCH == "staging" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH)
   before_script:
     # Install server dependencies without dev dependencies for production
     - cd server && npm ci --omit=dev --cache server/.npm --prefer-offline && cd ..
