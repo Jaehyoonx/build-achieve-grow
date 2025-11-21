@@ -27,7 +27,7 @@ const swaggerSpec = swaggerJsdoc(options);
  * @param {Express} app - Express application instance
  * @param {number} port - Port number the server is running on
  */
-function swaggerDocs(app, port) {
+function swaggerDocs(app) {
   // Swagger UI page
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
