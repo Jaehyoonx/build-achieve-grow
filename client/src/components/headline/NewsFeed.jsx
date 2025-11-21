@@ -8,10 +8,16 @@ export default function NewsFeed() {
   const [error, setError] = useState(null);
   const [selectedFile, setSelectedFile] = useState('all');
   const [searchText, setSearchText] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchQuery(searchText);
+  };
 
   useEffect(() => {
     const fetchHeadlines = async () => {
-      if (!searchText){
+      if (!searchQuery){
         setLoading(false);
         return;
       }
@@ -40,7 +46,7 @@ export default function NewsFeed() {
       }
     };
     fetchHeadlines();
-  }, [selectedFile, searchText]);
+  }, [selectedFile, searchQuery]);
 
   if (loading) {
     return <div>Loading Headlines...</div>;
@@ -51,8 +57,8 @@ export default function NewsFeed() {
   }
 
   const filtered = headlines.filter(desired => {
-    if (!searchText) return true;
-    const word = searchText.toLowerCase();
+    if (!searchQuery) return true;
+    const word = searchQuery.toLowerCase();
     return (
       desired.Headlines.toLowerCase().includes(word) ||
       desired.Description.toLowerCase().includes(word)
@@ -69,15 +75,18 @@ export default function NewsFeed() {
       </select>
     </div>
 
-    <div>
-      <label>Search: </label>
-      <input
-        type="text"
-        placeholder="Search Headlines"
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-      />
-    </div>
+    <form onSubmit={handleSearch} >
+      <div>
+        <label>Search: </label>
+        <input
+          type="text"
+          placeholder="Search Headlines"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+      </div>
+      <button type="submit">Submit Search</button>
+    </form>
     <div>
       <ul>
         {filtered.map((headline, i) => 
