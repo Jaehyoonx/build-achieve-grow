@@ -51,6 +51,14 @@ const router = express.Router();
  *                   type: string
  *                   example: "Failed to fetch headline"
  */
+/**
+ * Fetch all headlines from db with limit of 300
+ * @async
+ * @param {express.Request} req - Express resquest 
+ * @param {number} limit=300 - This is the max number the headlines can contain
+ * @param {express.Response} res - Express response
+ * @returns {Promise} Json array of filtered headlines or might be error msg
+ */
 router.get('/headlines', async (req, res) => {
   try {
     await db.setCollection('headlines');
@@ -133,6 +141,15 @@ router.get('/headlines', async (req, res) => {
  *                 error:
  *                   type: string
  *                   example: "Failed to fetch headline"
+ */
+/**
+ * Fetch headlines filtered by news source(CNBC or Reuters)
+ * @async
+ * @param {express.Request} req - Express resquest 
+ * @param {string} req.params.source - this is for the source either cnbc_headlines or reuters
+ * @param {number} limit=300 - This is the max number the headlines can contain
+ * @param {express.Response} res - Express response
+ * @returns {Promise} Json array of filtered headlines or might be error msg
  */
 router.get('/headlines/:source', async (req, res) => {
   try { 
