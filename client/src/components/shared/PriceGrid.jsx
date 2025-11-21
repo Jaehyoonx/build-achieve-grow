@@ -83,7 +83,7 @@ export default function PriceGrid({
       {/* Left Panel: Grid of Cards */}
       <div className="price-grid-left">
         {items.map(item =>
-          renderCard(item, () => setSelectedSymbol(item.Symbol))
+          renderCard(item, () => setSelectedSymbol(item.Symbol), item.Symbol === selectedSymbol)
         )}
         <button className="load-more-btn" onClick={handleLoadMore}>
           Click to view more

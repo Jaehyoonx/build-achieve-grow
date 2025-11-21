@@ -4,7 +4,14 @@
 // This is exactly the same logic and comments you used in StockCard.
 import { useState, useEffect } from 'react';
 
-export default function PriceCard({ symbol, latestPrice, latestDate, previousClose, onClick }) {
+export default function PriceCard({
+  symbol,
+  latestPrice,
+  latestDate,
+  previousClose,
+  onClick,
+  isSelected
+}) {
 
   const [priceChangeText, setPriceChangeText] = useState('');
   const [percentText, setPercentText] = useState('');
@@ -57,8 +64,19 @@ export default function PriceCard({ symbol, latestPrice, latestDate, previousClo
     }
   }
 
+  let cardStyle = {};
+  if (isSelected) {
+    cardStyle = {
+      borderColor: '#27ae60',
+      borderWidth: '3px',
+      boxShadow: '0 0 10px rgba(39, 174, 96, 0.5)'
+    };
+  } else {
+    cardStyle = {};
+  }
+
   return (
-    <div className="price-card" onClick={handleSelect}>
+    <div className="price-card" onClick={handleSelect} style={cardStyle}>
       <h3>{symbol}</h3>
 
       <p>Latest Price as of {latestDate}: ${latestPrice.toFixed(2)}</p>

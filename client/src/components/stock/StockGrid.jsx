@@ -11,7 +11,7 @@ export default function StockGrid() {
     <PriceGrid
       fetchUrl="/api/stocks?latest=true"
 
-      renderCard={(stock, onClick) => 
+      renderCard={(stock, onClick, isSelected) =>
         <StockCard
           key={stock.Symbol}
           symbol={stock.Symbol}
@@ -19,6 +19,7 @@ export default function StockGrid() {
           latestDate={stock.Date}
           previousClose={stock.previousClose}
           onClick={onClick}
+          isSelected={isSelected}
         />
       }
 
