@@ -75,6 +75,42 @@ html, body, #root {
   padding: 2em;
 }
 
+/* Price cards in the left grid panel - interactive cards */
+.price-grid-left .price-card {
+  padding: 16px;
+  background-color: #1a1a1a;
+  border: 2px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.price-grid-left .price-card:hover {
+  background-color: #2a2a2a;
+  border-color: #fff;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+}
+
+.price-grid-left .price-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.price-grid-left .price-card p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.price-grid-left .price-card small {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #999;
+}
+
 .read-the-docs {
   color: #888;
 }
