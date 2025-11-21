@@ -82,7 +82,7 @@ bundlesize:
   allow_failure: false
 
 build-frontend:
-  stage: test
+  stage: build
   dependencies: [build]
   script:
     - cd client
