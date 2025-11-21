@@ -74,7 +74,7 @@ test:
 
 bundlesize:
   stage: test
-  dependencies: [build-frontend]
+  dependencies: [build, build-frontend]
   script:
     - cd client
     - npm run bundlesize
