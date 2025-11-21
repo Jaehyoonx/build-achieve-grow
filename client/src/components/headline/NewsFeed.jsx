@@ -54,7 +54,6 @@ export default function NewsFeed() {
   });
 
   return <div>
-    <h2>News Feed</h2>
     <div>
       <label>Source: </label>
       <select value={selectedFile} onChange={(e) => setSelectedFile(e.target.value)}>

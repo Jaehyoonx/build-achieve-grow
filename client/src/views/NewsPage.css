@@ -1,0 +1,20 @@
+.seperator-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 30px;
+}
+
+.seperator-box{
+    flex: 1;
+    border-radius: 8px;
+    border: 1px solid black;
+}
+
+.seperator-box ul{
+    padding-left: 20px;
+}
+.seperator-box li{
+    margin-bottom: 15px;
+}
