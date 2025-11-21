@@ -1,0 +1,195 @@
+/* Contact View Styles */
+/* Purpose: Styling for the Contact/About Us page with team member cards */
+
+.contact-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: #1a1a1a;
+  color: #fff;
+  min-height: 100vh;
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.contact-header h1 {
+  font-size: 42px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.contact-header p {
+  font-size: 18px;
+  color: #aaa;
+}
+
+/* Team Grid Layout */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+/* Team Member Card */
+.team-card {
+  background-color: #252525;
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.team-card:hover {
+  border-color: #8884d8;
+  box-shadow: 0 4px 15px rgba(136, 132, 216, 0.3);
+  transform: translateY(-5px);
+}
+
+.team-card h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.team-card .role {
+  font-size: 16px;
+  color: #8884d8;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.team-card .bio {
+  font-size: 14px;
+  color: #bbb;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  min-height: 60px;
+}
+
+/* Contact Links */
+.contact-links {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.contact-link {
+  padding: 10px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.contact-link.linkedin {
+  background-color: #0077b5;
+  color: white;
+}
+
+.contact-link.linkedin:hover {
+  background-color: #005885;
+  transform: scale(1.05);
+}
+
+.contact-link.email {
+  background-color: #7c7ccc;
+  color: white;
+}
+
+.contact-link.email:hover {
+  background-color: #6b6bbb;
+  transform: scale(1.05);
+}
+
+/* Contact Info Section */
+.contact-info {
+  background-color: #252525;
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+}
+
+.contact-info h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.contact-info p {
+  font-size: 16px;
+  color: #bbb;
+  line-height: 1.8;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contact-container {
+    padding: 30px 15px;
+  }
+
+  .contact-header h1 {
+    font-size: 32px;
+  }
+
+  .contact-header p {
+    font-size: 16px;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .contact-info {
+    padding: 30px 20px;
+  }
+
+  .contact-info h2 {
+    font-size: 24px;
+  }
+
+  .contact-info p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-container {
+    padding: 20px 10px;
+  }
+
+  .contact-header h1 {
+    font-size: 24px;
+  }
+
+  .contact-header p {
+    font-size: 14px;
+  }
+
+  .team-card {
+    padding: 20px;
+  }
+
+  .team-card h2 {
+    font-size: 20px;
+  }
+
+  .contact-link {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}

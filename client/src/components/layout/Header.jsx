@@ -1,12 +1,17 @@
 import './Header.css';
 
-export default function Header({ viewTitle }) {
+export default function Header({ viewTitle, onContactClick }) {
   return (
     <header className="header">
       {/* Top Navigation */}
       <nav className="header-top-nav">
         <a href="/" className="nav-link">Home</a>
-        <a href="#contact" className="nav-link">Contact</a>
+        <button
+          onClick={onContactClick}
+          className="nav-link nav-button"
+        >
+          Contact
+        </button>
       </nav>
 
       {/* Logo and Brand Section */}

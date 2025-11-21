@@ -29,6 +29,13 @@
   color: #ccc;
 }
 
+.nav-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
 /* Logo and Brand Section */
 .header-logo-section {
   display: flex;

@@ -7,6 +7,7 @@ import EtfGrid from './components/etf/EtfGrid';
 import Footer from './components/layout/Footer';
 
 const NewsPage = lazy(() => import('./views/NewsPage'));
+const Contact = lazy(() => import('./views/Contact'));
 function App() {
   const [currentView, setCurrentView] = useState('stocks');
 
@@ -17,6 +18,8 @@ function App() {
       return 'Browse and compare ETFs';
     } else if (currentView === 'headlines') {
       return 'Latest financial news and headlines';
+    } else if (currentView === 'contact') {
+      return 'Meet the Team';
     } else {
       return '';
     }
@@ -33,6 +36,12 @@ function App() {
           <NewsPage />
         </Suspense>
       );
+    } else if (currentView === 'contact') {
+      return (
+        <Suspense fallback={<div>Loading contact ..</div>}>
+          <Contact />
+        </Suspense>
+      );
     } else {
       return null;
     }
@@ -40,7 +49,10 @@ function App() {
 
   return (
     <div className="app-container">
-      <Header viewTitle={getViewTitle()} />
+      <Header
+        viewTitle={getViewTitle()}
+        onContactClick={() => setCurrentView('contact')}
+      />
       <Controls currentView={currentView} onViewChange={setCurrentView} />
       <main className="app-main">
         {renderContent()}
