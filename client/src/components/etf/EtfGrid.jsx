@@ -11,7 +11,7 @@ export default function EtfGrid() {
     <PriceGrid
       fetchUrl="/api/etfs?latest=true"
 
-      renderCard={(etf, onClick) => 
+      renderCard={(etf, onClick, isSelected) =>
         <EtfCard
           key={etf.Symbol}
           symbol={etf.Symbol}
@@ -19,6 +19,7 @@ export default function EtfGrid() {
           latestDate={etf.Date}
           previousClose={etf.previousClose}
           onClick={onClick}
+          isSelected={isSelected}
         />
       }
 
