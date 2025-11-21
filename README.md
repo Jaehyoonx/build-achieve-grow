@@ -37,7 +37,7 @@ Phase 2 focuses on implementing the client-side features and improving the serve
   - /api/stocks, /api/stocks/:symbol, /api/stocks/:symbol/latest
   - /api/etfs, /api/etfs/:source
   - /api/headlines
-- Swagger Documentation: Accessible at /api-docs with OpenAPI annotations.
+- Swagger Documentation: Accessible at /docs with OpenAPI annotations.
 - Unit Tests: Mocha/Chai/Supertest suites for etfs.js and stocks.js.
 - CI/CD Integration: GitLab CI pipeline runs linting, build, and tests.
 - Bundle Size Monitoring: bundlesize2 tracks JS/CSS build weights.

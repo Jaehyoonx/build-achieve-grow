@@ -29,15 +29,15 @@ const swaggerSpec = swaggerJsdoc(options);
  */
 function swaggerDocs(app, port) {
   // Swagger UI page
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   // Docs in JSON format
-  app.get('/api-docs.json', (req, res) => {
+  app.get('/docs.json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
   });
 
-  console.log(`Swagger docs available at http://localhost:${port}/api-docs`);
+  console.log(`Swagger docs available at http://localhost:${port}/docs`);
 }
 
 export default swaggerDocs;
