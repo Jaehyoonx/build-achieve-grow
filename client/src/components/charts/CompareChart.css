@@ -1,0 +1,102 @@
+/* CompareChart Component Styles */
+/* Purpose: Contains styling for the comparison chart component */
+/* Inherits responsive design from PriceChart.css and uses same container structure */
+
+/* Reuse PriceChart container, title, and description styles */
+.price-chart-container {
+  width: 100%;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  margin: 20px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.price-chart-title {
+  margin-top: 0;
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+}
+
+.price-chart-description {
+  text-align: center;
+  color: #666;
+  font-size: 15.2px;
+  margin: 5px 0 20px 0;
+}
+
+/* Chart wrapper for responsive sizing */
+.chart-wrapper {
+  width: 100%;
+}
+
+/* Custom tooltip styling */
+.custom-tooltip {
+  background-color: #ffffff;
+  border: 2px solid #8884d8;
+  border-radius: 6px;
+  padding: 10px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.custom-tooltip p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+}
+
+.tooltip-date {
+  color: #8884d8;
+  margin-bottom: 4px;
+}
+
+.tooltip-price {
+  color: #27ae60;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Responsive styles for mobile devices (< 640px) */
+@media (max-width: 639px) {
+  .price-chart-container {
+    padding: 15px;
+    margin: 15px auto;
+    max-width: 100%;
+  }
+
+  .price-chart-title {
+    font-size: 19.2px;
+    text-align: center;
+  }
+
+  .price-chart-description {
+    font-size: 13.6px;
+    margin: 5px 0 15px 0;
+  }
+}
+
+/* Responsive styles for tablet devices (640px - 1023px) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .price-chart-container {
+    padding: 18px;
+  }
+
+  .price-chart-title {
+    font-size: 20.8px;
+  }
+}
+
+/* Responsive styles for desktop devices (>= 1024px) */
+@media (min-width: 1024px) {
+  .price-chart-container {
+    padding: 20px;
+  }
+
+  .price-chart-title {
+    font-size: 24px;
+  }
+}
+
