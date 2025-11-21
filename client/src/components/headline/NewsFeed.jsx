@@ -12,6 +12,12 @@ export default function NewsFeed() {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    if(!searchText.trim().length < 2){
+      setError('Search term must be at least ');
+      return;
+    }
+
+    setError(null);
     setSearchQuery(searchText);
   };
 
