@@ -251,3 +251,117 @@
     font-size: 13px;
   }
 }
+
+/* Comparison stock selector */
+.comparison-selector {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 15px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.comparison-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.comparison-input {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 2px solid #ddd;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+  cursor: text;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-width: 150px;
+}
+
+.comparison-input:focus {
+  outline: none;
+  border-color: #8884d8;
+  box-shadow: 0 0 5px rgba(136, 132, 216, 0.3);
+}
+
+.comparison-input:hover {
+  border-color: #999;
+}
+
+/* Dropdown select styles for comparison selector */
+.comparison-select {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 2px solid #ddd;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-width: 180px;
+  font-family: inherit;
+}
+
+.comparison-select:focus {
+  outline: none;
+  border-color: #8884d8;
+  box-shadow: 0 0 5px rgba(136, 132, 216, 0.3);
+}
+
+.comparison-select:hover {
+  border-color: #999;
+}
+
+.comparison-select option {
+  padding: 8px;
+  color: #333;
+  background-color: #fff;
+}
+
+/* Reset button for comparison selector */
+.comparison-reset-button {
+  padding: 8px 14px;
+  border-radius: 4px;
+  border: none;
+  background-color: #7c7ccc;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s, transform 0.1s;
+  font-size: 13px;
+  height: fit-content;
+  white-space: nowrap;
+}
+
+.comparison-reset-button:hover {
+  background-color: #6b6bbb;
+  transform: scale(1.02);
+}
+
+.comparison-reset-button:active {
+  background-color: #5a5aaa;
+  transform: scale(0.98);
+}
+
+.comparison-status {
+  font-size: 13px;
+  color: #666;
+  font-style: italic;
+}
+
+.comparison-error {
+  font-size: 13px;
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+.comparison-success {
+  font-size: 13px;
+  color: #27ae60;
+  font-weight: 600;
+}
