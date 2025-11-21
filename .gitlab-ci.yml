@@ -94,6 +94,11 @@ build-app-archive:
   # rules:
   #   # Only run on tags on staging or main branch
   #   - if: $CI_COMMIT_TAG && ($CI_COMMIT_BRANCH == "staging" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH)
+  before_script:
+    # Install server dependencies without dev dependencies for production
+    # Use --omit=dev to skip dev dependencies since we don't need them in production
+    # Provided by instructor Maja Frydrychowicz in Project Specs
+    - cd server && npm ci --omit=dev --cache server/.npm --prefer-offline && cd ..
   script:
     # Create tar.gz archive with production-ready files
     # Includes: server code, server node_modules (prod only), client dist build, and package files
