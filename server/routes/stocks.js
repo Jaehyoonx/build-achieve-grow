@@ -81,8 +81,6 @@ router.get('/stocks', async (req, res) => {
       // Cache Control improvement for 1 hour
       res.set('Cache-Control', 'public, max-age=3600');
 
-      res.json(latestStocks.map(transformPriceData));
-      
       /*
         Apply limit after sorting. If limit is larger than 0, slice the array to that limit.
         If limit is 0, return all records.
