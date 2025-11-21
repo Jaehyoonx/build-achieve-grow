@@ -55,6 +55,11 @@ router.get('/headlines', async (req, res) => {
   try {
     await db.setCollection('headlines');
     const limit = parseInt(req.query.limit) || 300;
+    if(limit > 300 || limit < 1){
+      return res.status(400).json({
+        error: 'Limit must be a number betweek 1 and 300'
+      });
+    }
     const headlines = await db.collection.find({}).limit(limit).toArray();
 
     //Cache Control improvement for 1 hour
@@ -140,6 +145,11 @@ router.get('/headlines/:source', async (req, res) => {
     
 
     const limit = parseInt(req.query.limit) || 300;
+    if(limit > 300 || limit < 1){
+      return res.status(400).json({
+        error: 'Limit must be a number betweek 1 and 300'
+      });
+    }
     const headlines = await db.collection.find({ fileName: source }).limit(limit).toArray();
 
     //Cache Control improvement for 1 hour
