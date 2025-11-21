@@ -43,7 +43,10 @@ router.get('/etfs', async (req, res) => {
 
     if (latest) {
       // Only the most recent record per symbol
-      const allEtfs = await db.collection.find({}).sort({ Date: -1 }).limit(limit).toArray();
+      // Fetch a large batch sorted by date, deduplicate, then sort alphabetically
+      // Use 3x the limit or 500 records, whichever is larger to ensure we get enough unique symbols
+      const batchSize = Math.max(limit * 3, 500);
+      const allEtfs = await db.collection.find({}).sort({ Date: -1 }).limit(batchSize).toArray();
 
       const latestEtfMap = new Map();
 
@@ -64,8 +67,9 @@ router.get('/etfs', async (req, res) => {
 
       // Cache Control improvement for 1 hour
       res.set('Cache-Control', 'public, max-age=3600');
-
-      return res.json(latestEtfs.map(transformPriceData));
+      // Apply limit after sorting
+      const limitedEtfs = limit > 0 ? latestEtfs.slice(0, limit) : latestEtfs;
+      return res.json(limitedEtfs.map(transformPriceData));
     }
 
     // Regular fetch

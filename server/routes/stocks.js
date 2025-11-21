@@ -41,8 +41,23 @@ router.get('/stocks', async (req, res) => {
     const latest = req.query.latest === 'true';
 
     if (latest) {
-      // Only the most recent record per symbol
-      const allStocks = await db.collection.find({}).sort({ Date: -1 }).limit(limit).toArray();
+      /*
+        Only the most recent record per symbol.
+        
+        Fetch a large batch sorted by date, get the latest record for each symbol, 
+        then sort alphabetically. Use 3x the limit or 500 records, whichever is 
+        larger to ensure we get enough unique symbols after fetching the latest 
+        records and to avoid exceeding the memory limit of the database when sorting large datasets.
+        
+        Example error we're preventing:
+        Sort exceeded memory limit of 33554432 bytes, but did not opt in to external sorting.
+        
+        This also fixes an issue where symbols appeared out of order (e.g., ABM was 
+        followed by AFG, AWK, and AXP). By fetching a larger batch before deduplicating 
+        and sorting, we ensure all requested symbols are returned in proper alphabetical order.
+      */
+      const batchSize = Math.max(limit * 3, 500);
+      const allStocks = await db.collection.find({}).sort({ Date: -1 }).limit(batchSize).toArray();
 
       const latestStocksMap = new Map();
 
@@ -67,8 +82,15 @@ router.get('/stocks', async (req, res) => {
       res.set('Cache-Control', 'public, max-age=3600');
 
       res.json(latestStocks.map(transformPriceData));
+      
+      /*
+        Apply limit after sorting. If limit is larger than 0, slice the array to that limit.
+        If limit is 0, return all records.
+      */
+      const limitedStocks = limit > 0 ? latestStocks.slice(0, limit) : latestStocks;
+      res.json(limitedStocks.map(transformPriceData));
     } else {
-      // Regular fetch: return all or limited records
+      // Regular fetch: return all or limited records if latest is not requested
       const stocks = await db.collection.find({}).limit(limit).toArray();
 
       // Cache Control improvement for 1 hour
