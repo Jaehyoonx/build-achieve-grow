@@ -1,12 +1,12 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import Header from './components/layout/Header';
 import Controls from './components/layout/Controls';
 import StockGrid from './components/stock/StockGrid';
 import EtfGrid from './components/etf/EtfGrid';
-import NewsPage from './views/NewsPage';
 import Footer from './components/layout/Footer';
 
+const NewsPage = lazy(() => import('./views/NewsPage'));
 function App() {
   const [currentView, setCurrentView] = useState('stocks');
 
@@ -28,7 +28,11 @@ function App() {
     } else if (currentView === 'etfs') {
       return <EtfGrid />;
     } else if (currentView === 'headlines') {
-      return <NewsPage />;
+      return (
+        <Suspense fallback={<div>Loading headlines ..</div>}>
+          <NewsPage />
+        </Suspense>
+      );
     } else {
       return null;
     }
