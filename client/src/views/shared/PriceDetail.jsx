@@ -94,6 +94,7 @@ export default function PriceDetail({ type, symbol, onBack }) {
           <div className="price-detail-card">
             <PriceCard
               symbol={latest.Symbol}
+              latestDate={latest.Date}
               latestPrice={latest.Close}
               previousClose={previousPrice}
             />
