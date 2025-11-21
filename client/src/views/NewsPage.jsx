@@ -4,6 +4,13 @@ import { useState } from 'react';
 import './NewsPage.css';
 import HeadlineList from '../components/headline/HeadlineList';
 import NewsFeed from '../components/headline/NewsFeed';
+
+
+/**
+ * NewsPage component that provides two ways to search through all the headlines
+ * There is either Year or Word search
+ * @returns {JSX.Element} Page with years and word filter search for headlines
+ */
 export default function NewsPage() {
   const [yearInput, setYearInput] = useState('');
   const [searchYear, setSearchYear] = useState('');

@@ -1,6 +1,13 @@
 //This Headline list is used for the filter of the headlines based on the years
 import { useEffect, useState } from 'react';
 
+
+/**
+ * This Component displays headlines filtered by a specific 
+ * year that you want to look at mainly 2018-19-20
+ * @param {string} year - This must be a four digit to filter headlines by year 
+ * @returns 
+ */
 export default function HeadlineList({ year }) {
   const [headlines, setHeadlines] = useState([]);
   const [loading, setLoading] = useState(true);

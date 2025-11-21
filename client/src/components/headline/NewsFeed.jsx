@@ -2,6 +2,13 @@
 // Purpose: Shows news headlines relevant to a selected stock/ETF.
 // Will search through each headline for a specific word
 import { useEffect, useState } from 'react';
+
+/**
+ * This component displays the news headline with filtering of source and word that use inputs
+ * But also it cannot be lower than length of 2 
+ * @returns {JSX.Element} News feed that depending on the source and the word 
+ * will give you results of what headlines are refered
+ */
 export default function NewsFeed() {
   const [headlines, setHeadlines] = useState([]);
   const [loading, setLoading] = useState(true);
