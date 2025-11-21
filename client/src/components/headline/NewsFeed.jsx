@@ -11,6 +11,12 @@ export default function NewsFeed() {
 
   useEffect(() => {
     const fetchHeadlines = async () => {
+      if (!searchText){
+        setLoading(false);
+        return;
+      }
+      
+      
       setLoading(true);
       setError(null);
 
@@ -34,7 +40,7 @@ export default function NewsFeed() {
       }
     };
     fetchHeadlines();
-  }, [selectedFile]);
+  }, [selectedFile, searchText]);
 
   if (loading) {
     return <div>Loading Headlines...</div>;
