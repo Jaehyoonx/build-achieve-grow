@@ -101,6 +101,7 @@ export default function NewsFeed() {
       <button type="submit">Submit Search</button>
     </form>
     <div>
+      {filtered.length === 0 && <p> No headline found</p>}
       <ul>
         {filtered.map((headline, i) => 
           <li key={i}>

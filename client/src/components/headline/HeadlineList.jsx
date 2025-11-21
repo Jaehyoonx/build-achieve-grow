@@ -55,6 +55,8 @@ export default function HeadlineList({ year }) {
   return (
     <div>
       <h2>Headlines from {year}</h2>
+      {headlines.length === 0 && <p> No headline found</p>}
+
       <ul>
         {headlines.map((headline, i) => 
           <li key={i}>
