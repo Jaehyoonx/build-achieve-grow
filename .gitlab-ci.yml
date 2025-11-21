@@ -90,17 +90,16 @@ build-app-archive:
   dependencies:
     - build
     - bundlesize
-  rules:
-    # Only run on tags on staging or main branch
-    - if: $CI_COMMIT_TAG && ($CI_COMMIT_BRANCH == "staging" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH)
+  # rules:
+  #   # Only run on tags on staging or main branch
+  #   - if: $CI_COMMIT_TAG && ($CI_COMMIT_BRANCH == "staging" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH)
   before_script:
     # Install server dependencies without dev dependencies for production
     - cd server && npm ci --omit=dev --cache server/.npm --prefer-offline && cd ..
   script:
     # Create tar.gz archive with production-ready files
-    # Includes: server code, server node_modules (prod only), package files, and .env template
-    # Excludes: client build (not needed in prod), client node_modules, dev dependencies, test files
-    # because server serves static files from its own build process
+    # Includes: server code, server node_modules (prod only), client dist build, package files
+    # Excludes: client node_modules, dev dependencies, test files
     - tar -zcvf $RELEASE_FILE
         server/node_modules
         server/routes
@@ -111,6 +110,7 @@ build-app-archive:
         server/swagger.js
         server/package.json
         server/package-lock.json
+        client/dist
         package.json
         package-lock.json
         README.md
