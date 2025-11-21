@@ -86,6 +86,7 @@ build-frontend:
   dependencies: [build]
   script:
     - cd client
+    - npm ci --prefer-offline
     - npm run build
   artifacts:
     expire_in: 1 days
