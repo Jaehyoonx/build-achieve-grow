@@ -12,8 +12,8 @@ export default function NewsFeed() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if(!searchText.trim().length < 2){
-      setError('Search term must be at least ');
+    if(searchText.trim().length < 2){
+      setError('Search term must be at least 2 characters');
       return;
     }
 
