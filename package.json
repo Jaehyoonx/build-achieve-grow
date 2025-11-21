@@ -19,6 +19,7 @@
   },
   "homepage": "https://gitlab.com/dawson-cst-cohort-2026/520/section2/teams/TeamM-23-ChristianHaiderRyan/520-project-bui-ahmed-graceffa#readme",
   "dependencies": {
+    "compression": "^1.8.1",
     "eslint": "^9.38.0",
     "mongodb": "^6.20.0"
   }

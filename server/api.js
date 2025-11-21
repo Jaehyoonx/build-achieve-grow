@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import swaggerDocs from './swagger.js'; 
 
 import headlineRoute from './routes/headlines.js';
@@ -9,6 +10,8 @@ const app = express();
 const port = 3000;
 
 // Middleware
+// Enable gzip compression for all responses
+app.use(compression());
 app.use(express.static('../client/dist'));
 
 // API Routes
