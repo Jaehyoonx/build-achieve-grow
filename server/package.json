@@ -4,7 +4,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha --timeout 10000"
+    "start": "NODE_ENV=production node bin/www",
+    "test": "NODE_ENV=test mocha --timeout 10000",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",

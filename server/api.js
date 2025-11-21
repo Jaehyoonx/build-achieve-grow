@@ -1,13 +1,15 @@
 import express from 'express';
 import compression from 'compression';
 import swaggerDocs from './swagger.js'; 
+import process from 'node:process';
 
 import headlineRoute from './routes/headlines.js';
 import etfsRoute from './routes/etfs.js';
 import stockRoute from './routes/stocks.js';
 
 const app = express();
-const port = 3000;
+const isProduction = process.env.NODE_ENV === 'production';
+const port = process.env.PORT || 3001;
 
 // Middleware
 // Enable gzip compression for all responses
@@ -23,4 +25,4 @@ app.use('/api', stockRoute);
 swaggerDocs(app, port); 
 
 export default app;
-export { port };
+export { port, isProduction };

@@ -1,7 +1,9 @@
 //data base section that will create and connect stuff to db
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import process from 'node:process';
-process.loadEnvFile();
+if (process.env.NODE_ENV !== 'production') {
+  process.loadEnvFile();
+}
 const dbUrl = process.env.ATLAS_URI;
 
 let instance = null;

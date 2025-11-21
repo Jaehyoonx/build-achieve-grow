@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import app, { port } from '../api.js';
+import app, { port, isProduction } from '../api.js';
 import { db } from '../db/db.js';
 
 let server;
@@ -15,6 +15,10 @@ try {
 
   server = app.listen(port, () => {
     console.log(`Server listening on http://localhost:${port}`);
+
+    if(isProduction){
+      console.log('Production mode')
+    }
   });
 
   // handle server-level errors during startup
