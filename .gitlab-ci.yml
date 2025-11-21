@@ -99,7 +99,8 @@ build-app-archive:
     # Install server dependencies without dev dependencies for production
     # Use --omit=dev to skip dev dependencies 
     # Provided by course instructor Maja Frydrychowicz
-    - cd server && npm ci --omit=dev --cache server/.npm --prefer-offline && cd ..
+    # --prefix server tells npm to run in the server/ directory without needing to cd into it
+    - npm ci --omit=dev --cache server/.npm --prefer-offline --prefix server
   script:
     # Create tar.gz archive with production-ready files
     # Includes: server code, server node_modules (prod only), package files, and client dist build
