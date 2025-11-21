@@ -15,6 +15,7 @@ stages:
   - build
   - lint 
   - test
+  - release
 
 build:
   stage: build
@@ -81,3 +82,42 @@ bundlesize:
   # CI should fail if bundle grows too much.
   allow_failure: false
 
+# Release stage: Create production artifact for AWS deployment
+build-app-archive:
+  stage: release
+  variables:
+    RELEASE_FILE: release-$CI_PROJECT_NAME-$CI_COMMIT_TAG-$CI_COMMIT_SHORT_SHA.tar.gz
+  dependencies:
+    - build
+    - bundlesize
+  # TODO: Uncomment rules section after testing on MR
+  # rules:
+  #   # Only run on tags on staging or main branch
+  #   - if: $CI_COMMIT_TAG && ($CI_COMMIT_BRANCH == "staging" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH)
+  before_script:
+    # Install server dependencies without dev dependencies for production
+    - cd server && npm ci --omit=dev --cache server/.npm --prefer-offline && cd ..
+  script:
+    # Create tar.gz archive with production-ready files
+    # Includes: server code, server node_modules (prod only), package files, and .env template
+    # Excludes: client build (not needed in prod), client node_modules, dev dependencies, test files
+    # because server serves static files from its own build process
+    - tar -zcvf $RELEASE_FILE
+        server/node_modules
+        server/routes
+        server/utils
+        server/db
+        server/bin
+        server/api.js
+        server/swagger.js
+        server/package.json
+        server/package-lock.json
+        package.json
+        package-lock.json
+        README.md
+  artifacts:
+    name: release-$CI_PROJECT_NAME-$CI_COMMIT_TAG
+    expire_in: 30 days
+    when: on_success
+    paths:
+      - $RELEASE_FILE
