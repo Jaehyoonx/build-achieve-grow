@@ -17,6 +17,10 @@ Additionally, API responses were sent uncompressed, resulting in large payloads 
 The main application bundle (542.84 kB uncompressed) was not optimized for lazy loading, forcing the browser to download all code including infrequently used routes (News, Contact) on initial page load.  
 These factors combined created unnecessary bandwidth consumption and slower initial page loads, particularly on slower network connections.
 
+Without React.Lazy. There was an issue with switching between tabs, which would cause the page to flicker, including headlines. Once I added React.Lazy , it just fetches once, and after switching to the headline, it no longer flickers.
+
+Also, before cache control, the headline would need to fetch every time to get data, and now it only needs to do that once, and when you go to a different page, it no longer needs to fetch from the DB every time.
+
 ## Summary of Changes
 
 ### Change 1: Caching for Stock History, Latest Price, and Search Endpoints
@@ -99,13 +103,55 @@ Impact:
 - Secondary routes (News, Contact) load on-demand
 - Smaller bundleSize means faster downloads on slower connections
 
+### Change 5 Caching for Headlines
+
+Lead: Christian Graceffa
+Link: 
+- [(GitLab link to `/server/routes/headlines.js`)] (https://gitlab.com/dawson-cst-cohort-2026/520/section2/teams/TeamM-23-ChristianHaiderRyan/520-project-bui-ahmed-graceffa/-/blob/M3/server/routes/headlines.js?ref_type=heads#L74)
+
+- [(GitLab link to `/server/routes/headlines.js`)] (https://gitlab.com/dawson-cst-cohort-2026/520/section2/teams/TeamM-23-ChristianHaiderRyan/520-project-bui-ahmed-graceffa/-/blob/M3/server/routes/headlines.js?ref_type=heads#L173)
+
+Change Made:
+- Added cache control headers to the headlines api route
+- Previously had status code 200 eveyrtime you would go to headline, but now when you go back and forth between another page, it will have status code 304
+- when it had code 200 it would have 4-5ms response time for css and react data
+- with cache control code it reduced the response time to 2-3ms. which isn't much but it is faster.
+Impact:
+- reduces unnecessary data 
+- improve client-side performance
+
+### Change 6
+
+Lead: Christian Graceffa
+Link: 
+- [(GitLab link to `/client/src/App.jsx`)](https://gitlab.com/dawson-cst-cohort-2026/520/section2/teams/TeamM-23-ChristianHaiderRyan/520-project-bui-ahmed-graceffa/-/blob/M3/client/src/App.jsx?ref_type=heads#L9)
+
+- [(GitLab link to `/client/src/App.jsx`)](https://gitlab.com/dawson-cst-cohort-2026/520/section2/teams/TeamM-23-ChristianHaiderRyan/520-project-bui-ahmed-graceffa/-/blob/M3/client/src/App.jsx?ref_type=heads#L35)
+
+Change Made:
+- Implemented react.lazy and suspense for the headline component 
+- now the headline chunk is only downloaded once, only on the first click when you go to headlines.
+- after the download is finished it, and you go between headlines and lets say etfs, it doe not flicker like the other two do, instead it renders instantly without the flicker. making it more smooth.
+
+Impact:
+- Improve performance for users
+- in my opinion it makes it so that it doesn't try to make the tab visually jarring like when siwtching between etfs and stocks in my opinion.
+- reduces time when switching inbetween tabs.
 ## Conclusion
 
 Adding caching to nearly all stock and ETF endpoints had the greatest effect on performance.  
 Response compression and bundle optimization significantly improved network performance and initial load times.  
 Database load dropped dramatically, repeated request times went from hundreds of milliseconds to just a few, and UI transitions became significantly more responsive.  
+
+Adding React.Lazy and Suspense for the Headlines component to make the user just need to load the component only the first time, and after it is downloaded, eliminate the flicker when switching between tabs, making it smoother and faster. This made the most visual difference ever for Headlines.
+
+ Added cache control for the Headlines API reduces the repeated request time since, without cache control, it would need to fetch over and over again, but with it, it does not need to, and since it is saved on the page, it made the speed go faster when accessing the page again for Headlines.
+
+
 Key things learned:  
 1. Read-heavy financial data benefits immediately from simple in-memory caching.  
 2. Even without a distributed cache, server-side caching eliminates most common bottlenecks.  
 3. Performance tools clearly reveal improvements when comparing before/after request waterfalls.
 4. Compressing data before sending it over the network can reduce download sizes by 65-70%, making the app load much faster. 
+5. Learned how to use React.Lazy properply and took me a while to actually understand what exactly it did.
+6. Learned how cache-control reduces the loading time and reduces repeated request times.
