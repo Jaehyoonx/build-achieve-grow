@@ -17,7 +17,7 @@ export default function Header({ viewTitle, onContactClick }) {
       {/* Logo and Brand Section */}
       <div className="header-logo-section">
         <div className="logo-box">
-          <img rel="preload" src="/logo.png" alt="BAG Logo" className="logo-image" />
+          <img src="/logo.png" alt="BAG Logo" className="logo-image" />
         </div>
         <div className="brand-text">
           <p>Build.</p>

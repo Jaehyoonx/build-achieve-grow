@@ -137,6 +137,25 @@ Impact:
 - Improve performance for users
 - in my opinion it makes it so that it doesn't try to make the tab visually jarring like when siwtching between etfs and stocks in my opinion.
 - reduces time when switching inbetween tabs.
+
+### Change 7: Preloading the Logo Image
+
+Lead: Haider Ahmed
+Link: (GitLab link to /client/public/index.html)
+
+Change Made:
+Added a preload directive for logo.png inside public/index.html:
+
+<link rel="preload" href="/logo.png" as="image" />
+
+Previously, the browser only requested the logo after the Header component mounted, which caused a small visual delay on first load. By preloading the logo, the browser begins fetching it immediately when parsing the HTML, making the image available before React renders the header.
+
+Impact:
+- Removes the initial logo flicker during first load
+- Makes the header appear instantly on cold starts
+- Improves visual smoothness on all pages since the header is global
+- Verified in Network panel that logo.png now loads earlier with higher priority
+
 ## Conclusion
 
 Adding caching to nearly all stock and ETF endpoints had the greatest effect on performance.  
