@@ -113,7 +113,7 @@ Render Deployment (HTTPS, HTTP/2):
 - Platform: Linux/Unix
 - Blueprint: Node.js (Bitnami)
 - Create custom SSH key → name: 2025-520-yourname
-- Download the .pem file
+- Download the .pem file (the .pem file needs to be in the same location for the terminal meaning if you are in the directory of Desktop .pem has to be in there, if not it will not work.)
 - Instance name: 2025-520-BAG-Ahmed-Bui-Graceffa
 - Add tag: 2025-520
 - Create instance
@@ -160,7 +160,7 @@ cd ~/bag/server
 nano .env
 
 Add:
-ATLAS_URI= go on MongoDB click ip and after add new IP and after add the IP that is connected to bitnami inside mongoDB to connect it
+ATLAS_URI= just mongo db string that we get to connect to the clustor
 Save and exit.
 
 10) Install pm2 on AWS
