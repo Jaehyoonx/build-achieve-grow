@@ -2,7 +2,10 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import process from 'node:process';
 
-process.loadEnvFile();
+// Only load .env file in development (Render sets env vars directly in production)
+if (process.env.NODE_ENV !== 'production') {
+  process.loadEnvFile();
+}
 
 const dbUrl = process.env.ATLAS_URI;
 
