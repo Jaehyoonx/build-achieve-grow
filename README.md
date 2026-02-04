@@ -103,7 +103,7 @@ AWS Lightsail (HTTP only):
 [AWS Lightsail](http://16.52.160.193/)
 
 Render Deployment (HTTPS, HTTP/2):
-[Render](https://five20-project-bui-ahmed-graceffa.onrender.com/)
+[Render](https://build-achieve-grow-app.onrender.com/)
 
 ## How to re-deploy AWS LightSail
 1) Create Lightsail Instance
